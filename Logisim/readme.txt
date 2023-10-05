@@ -1,0 +1,1 @@
+To install Logisim run setup.exe.

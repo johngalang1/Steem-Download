@@ -1,0 +1,15 @@
+To install STeem on your home machine:
+
+1. Open the Home Steem.zip file
+2. Copy the C and D folders to the C:\ drive
+3. Copy the Steem shortcut to your desktop
+4. Copy the Steem folder to the C:\Program Files (x86) folder
+
+Steem should run with access to two harddrives C: and D: which are
+mapped to the identically named folders on the Windows C:\ drive. 
+When opening a file in Devpac it should default to the D drive (folder).
+
+If you want you can re-map the D drive to anywhere you want using the
+HD drawer icon on far right of the Steem toolbar.
+
+PP (August 15 2018)
