@@ -8,14 +8,40 @@
 ;
 ;Purpose:	TO READ IN A 3 DIGIT NUMBER AND CALCULATE THROUGH THE FORMULA GIVEN 
 ;		AND THEN WRITE OUT THE 3 DIGIT CALCULATED NUMBER 
-;Details:	
+;
+;Details:	The programmer should only input a 3 digit decimal number and the program should output 
+;		a 3 digit decimal number. All calculations are in hexidecimal. 
+;
+;Status:	Program is successfully working for 3 tested numbers: 180, 999, 284 
+;		and provides the desired result at the end of program. 
+;
+;		For example, using the biggest input number possible, 999, each digit is read as a character in hexidecimal.
+;		In order
+;
+;
+;
+;
+;Register Table:	
 ;		d0 - Inputs a read character 
 ;		   - Outputs a character 	
 ;
 ;		d1 - Stores the Hundreth position of a number 
 ;                  - Outputs the Hundreth Position of a number 
 ;		
-;		d2 - Stores the 
+;		d2 - Stores the  Tenth position of a number 
+; 		   - Outputs the Tenth position of a number 
+; 
+;		d3 - Stores the Ones position of a number  
+; 		   - Outputs the Ones position of a number 
+; 
+; 		d4 - Stores the value x for calculations 
+; 
+; 		d5 - Stores x^2 
+;		
+;		d6 - Stores the calculated number  
+; 
+;		d7 - Stores 5x
+
 start:				; TO DO: fill in your code and inline doc. here
 	
 	jsr	read_char  	;Reads input  
