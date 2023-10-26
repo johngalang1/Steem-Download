@@ -30,8 +30,25 @@
 ;		In order to calculate y = ((8*x2 - 5*x + 1997) % 10000) / 10, 
 ;		Store x^2 in another register, which then = 998001 or F3A71 in hex
 ;		Since 8 = 2^3, 8 multipled by x^2 is operated by shifting the as longword 3 bits to the left, which = 7984008 or 79D388 
-;		Aferwards we subtract by 5x and add 10000 to equal 
+;		Aferwards we subtract by 5x and add 10000 to equal 7981010 or 79C7D2
+;		To use modulous, we have to divide the number, swap, and then clear the upper 16 bits, leaving us with the remainder 
+;		Dividing 79C7D2 by 10000 = 03F2031E 
+;		Swap: 031E03F2 
+;		Clear: 000003F2 
+;		Divide by 10: 00000065  or 101 in decimal  
+;
+;		Now we have to seperate the number into the hundreth, tenth, and ones digit 
+;		Hundreth Digit: Divide by 100 and clear the upper 16 bits 
+;		065 / 100 = 00010001 -> 00000001
+;		Tenth Digit: Divide by 10, clear bits, divide by 10 and swap to get the remainder and then clear the upper 16 bits 
+;		065 / 10 = 0001000A -> 0000000A / 10 = 00000001 -> 00010000 -> 00000000
+;		Ones Digit: Divide by 10, swap. and clear the upper 16 bits. 
+;		065 / 10 = 0001000A -> 000A0001 -> 00000001 
 ;		
+;		Each of these digits are added by '0' or 30 in hexidecimal to turn back into ASCII values to print out
+;		And then once it is written on the output screen, it would be 101 
+;		
+;		Since this process works for the highest digit inputted, it should work for all numbers, such as 180 turning to 029 and 284 turning to 582
 ;
 ;Register Table:	
 ;		d0 - input – holds the character read from the keyboard
