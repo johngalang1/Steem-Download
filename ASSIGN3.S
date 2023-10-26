@@ -10,37 +10,39 @@
 ;		AND THEN WRITE OUT THE 3 DIGIT CALCULATED NUMBER 
 ;
 ;Details:	The programmer should only input a 3 digit decimal number and the program should output 
-;		a 3 digit decimal number. All calculations are in hexidecimal. 
+;		a 3 digit decimal number. All calculations are in hexidecimal. The formula the program 
+		will calculate is y = ((8*x2 - 5*x + 1997) % 10000) / 10.
 ;
-;Status:	Program is successfully working for 3 tested numbers: 180, 999, 284 
+;Status:	Program is successfully working for 3 tested numbers: 180, 999, 284, abc.  
 ;		and provides the desired result at the end of program. 
-;
+;		
 ;		For example, using the biggest input number possible, 999, each digit is read as a character in hexidecimal.
-;		In order
-;
-;
+;		In order to convert each digit to their actual value number, we subtract by the character '0' or 30 in hexidecimal. 
+;		
+;		Once converted and deposited in a register(except d0), we have to clear the upper 24 bits due to the subroutine that affects d0.
+;		
 ;
 ;
 ;Register Table:	
-;		d0 - Inputs a read character 
-;		   - Outputs a character 	
+;		d0 - input – holds the character read from the keyboard
+;   		- output – holds the character being written to screen
 ;
-;		d1 - Stores the Hundreth position of a number 
-;                  - Outputs the Hundreth Position of a number 
-;		
-;		d2 - Stores the  Tenth position of a number 
-; 		   - Outputs the Tenth position of a number 
-; 
-;		d3 - Stores the Ones position of a number  
-; 		   - Outputs the Ones position of a number 
-; 
-; 		d4 - Stores the value x for calculations 
-; 
-; 		d5 - Stores x^2 
-;		
-;		d6 - Stores the calculated number  
-; 
-;		d7 - Stores 5x
+;		d1 - inputs the hundreth position of an 3 digit number
+;   		- outputs the hundreth number after the calculation
+;
+;		d2 - inputs the tens position of an 3 digit number
+;   		- outputs the tens number after the calculation
+;
+;		d3 - inputs the ones position of an 3 digit number
+;   		- outputs the ones number after the calculation
+;
+;		d4 - stores in the x value after expanding notation
+;
+;		d5 - stores in x to the power of 2 (x^2)
+;
+;		d6 - stores that value y, after the calculation
+;
+;		d7 - stores in the value 5x for the calculation
 
 start:				; TO DO: fill in your code and inline doc. here
 	
