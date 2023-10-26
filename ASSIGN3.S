@@ -11,17 +11,27 @@
 ;
 ;Details:	The programmer should only input a 3 digit decimal number and the program should output 
 ;		a 3 digit decimal number. All calculations are in hexidecimal. The formula the program 
-		will calculate is y = ((8*x2 - 5*x + 1997) % 10000) / 10.
+;		will calculate is y = ((8*x2 - 5*x + 1997) % 10000) / 10.
 ;
-;Status:	Program is successfully working for 3 tested numbers: 180, 999, 284, abc.  
+;Status:	Program is successfully working for 3 tested numbers: 180, 999, 284.  
 ;		and provides the desired result at the end of program. 
 ;		
 ;		For example, using the biggest input number possible, 999, each digit is read as a character in hexidecimal.
 ;		In order to convert each digit to their actual value number, we subtract by the character '0' or 30 in hexidecimal. 
-;		
-;		Once converted and deposited in a register(except d0), we have to clear the upper 24 bits due to the subroutine that affects d0.
-;		
+;		Each character 9, has an actual value of 39, so then it turns into its actual value of 9.
 ;
+;		Once converted and deposited in a register(except d0), we have to clear the upper 24 bits due to the subroutine that affects d0.
+;		Afterwards, we multiplty the hundreds digit by a hundred and the tens digit by 10 and add all of them together to achieve our x value. 
+;		
+;		9 * 100 = 900 
+;		9 * 10 = 90 
+;		900 + 90 + 9 = 999 - Actual Value / 3E7 in hexidecimal 
+;		
+;		In order to calculate y = ((8*x2 - 5*x + 1997) % 10000) / 10, 
+;		Store x^2 in another register, which then = 998001 or F3A71 in hex
+;		Since 8 = 2^3, 8 multipled by x^2 is operated by shifting the as longword 3 bits to the left, which = 7984008 or 79D388 
+;		Aferwards we subtract by 5x and add 10000 to equal 
+;		
 ;
 ;Register Table:	
 ;		d0 - input – holds the character read from the keyboard
@@ -44,11 +54,11 @@
 ;
 ;		d7 - stores in the value 5x for the calculation
 
-start:				; TO DO: fill in your code and inline doc. here
-	
-	jsr	read_char  	;Reads input  
-	move.l	d0,d1	   	;Stores input 
-	and.l	#$FF,d1	   	;Clears the upper 24 bits 
+reading_input:
+
+	jsr	read_char  	 
+	move.l	d0,d1	   	
+	and.l	#$FF,d1	   	
 	
 	jsr	read_char 
 	move.l	d0,d2 
@@ -57,6 +67,8 @@ start:				; TO DO: fill in your code and inline doc. here
 	jsr	read_char 
 	move.l	d0,d3 
 	and.l	#$FF,d3  
+
+converting_to_actual_number:
 
 	sub.b	#'0',d1		;Subtract characters by '0' to get actual number values	 
 	sub.b	#'0',d2 
@@ -71,6 +83,8 @@ start:				; TO DO: fill in your code and inline doc. here
 
 	move.l	d4,d5		;Register d5 will contain (x^2)
 	mulu	d5,d5
+
+calculations:
 
 	move.l	d5,d6	
 	lsl.l	#3,d6		;Since 8 is 2^3, we can shift 3 bits to the left which is the same as multiplying by 8
@@ -89,7 +103,9 @@ start:				; TO DO: fill in your code and inline doc. here
 	divu	#10,d6
 	and.l	#$FFFF,d6	
 
-	move.l	d6,d1		;Converting Values to decimal and individual digits
+converting_to_digits:
+
+	move.l	d6,d1	
 	divu	#100,d1  
 	and.l	#$FFFF,d1	;Hundreth Digit
 
@@ -105,11 +121,13 @@ start:				; TO DO: fill in your code and inline doc. here
 	swap	d3 
 	and.l	#$FFFF,d3	;Ones Digit
 	 
-	move.l	#13,d0		;New Line
+	move.l	#13,d0		
 	jsr	write_char
 
 	move.l	#10,d0
 	jsr	write_char
+
+printing:
 	
 	add.b	#'0',d1 	;Converting to ASCII		
 	add.b	#'0',d2
