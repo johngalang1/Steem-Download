@@ -1,3 +1,38 @@
+;Constants 
+CR			equ	13 
+LF			equ	10 
+
+TRUE			equ	1
+FALSE			equ	0 
+
+MAX_ROMANS		equ	7 
+MAX_STRING		equ	20 
+NO_ERROR		equ	0 
+MAX_DIGIT_COUNT		equ	3 
+C_NULL			equ	'\0'
+QUIT			equ	'Q' 
+
+;Roman_digit structure 
+ROMAN_DIGIT		equ	14	;Has 14 bytes of memory 
+DIGIT			equ	0	;takes in a byte 
+ARAB_VALUE		equ	1 	;takes in 2 bytes/ 1 word, contains a padding 
+SUBTRACTOR_INDEX	equ	4	;words start at even address 
+COUNT			equ	6	;takes in 1 byte, + padding
+MODIFIED		equ	8 	;takes in 1 byte, + padding
+MODIFIER		equ	10	;takes in 1 byte, + padding
+MAX_TIMES		equ	12	;takes in 1 byte, + padding
+
+
+;initializing array of structures 
+			lea	all_roman,a0 
+			clr.l	d0			;index couner
+			move.b	#MAX_ROMANS-1,d1	
+init_roman:		
+			
+
+;declare array of structures 
+all_roman:		ds.b	ROMAN_DIGIT*MAX_ROMANS
+
 
 
 
