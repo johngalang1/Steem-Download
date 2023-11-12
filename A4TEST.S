@@ -13,26 +13,26 @@ C_NULL			equ	'\0'
 QUIT			equ	'Q' 
 
 ;Roman_digit structure 
-ROMAN_DIGIT		equ	14	;Has 14 bytes of memory 
-DIGIT			equ	0	;takes in a byte 
-ARAB_VALUE		equ	1 	;takes in 2 bytes/ 1 word, contains a padding 
-SUBTRACTOR_INDEX	equ	4	;words start at even address 
-COUNT			equ	6	;takes in 1 byte, + padding
-MODIFIED		equ	8 	;takes in 1 byte, + padding
-MODIFIER		equ	10	;takes in 1 byte, + padding
-MAX_TIMES		equ	12	;takes in 1 byte, + padding
-
-
-;initializing array of structures 
-			lea	all_roman,a0 
-			clr.l	d0			;index couner
-			move.b	#MAX_ROMANS-1,d1	
-init_roman:		
+ROMAN_DIGIT		equ	10	
+DIGIT			equ	0	
+ARAB_VALUE		equ	1 	 
+SUBTRACTOR_INDEX	equ	4	
+COUNT			equ	6	
+MODIFIED		equ	7 	
+MODIFIER		equ	8	
+MAX_TIMES		equ	9	
+	
 			
 
 ;declare array of structures 
 all_roman:		ds.b	ROMAN_DIGIT*MAX_ROMANS
-
+			dc.b 'I', 1, -1, 0, 0, 0, MAX_DIGIT_COUNT	 
+           		dc.b 'V', 5,  0, 0, 0, 0, 1
+           		dc.b 'X', 10, 0, 0, 0, 0, MAX_DIGIT_COUNT
+           		dc.b 'L', 50, 2, 0, 0, 0, 1
+           		dc.b 'C', 100, 2, 0, 0, 0, MAX_DIGIT_COUNT
+           		dc.b 'D', 500, 4, 0, 0, 0, 1
+           		dc.b 'M', 1000, 4, 0, 0, 0, MAX_DIGIT_COUNT
 
 
 
