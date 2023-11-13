@@ -30,23 +30,20 @@ start:
 
 intro1_loop:		
 			move.b	(a1)+,d0  
-			cmp.b	#LF,d0
 			beq	intro2_loop
 			jsr	write_char 
-			bra	intro1_loop:
+			bra	intro1_loop
 intro2_loop: 
-			move.b	(a1)+,d0  
-			cmp.b	#LF,d0
+			move.b	(a2)+,d0  
 			beq	intro3_loop
 			jsr	write_char 
-			bra	intro2_loop:
+			bra	intro2_loop
 
 intro3_loop:
-			move.b	(a1)+,d0  
-			cmp.b	#LF,d0
+			move.b	(a3)+,d0  
 			beq	input_loop
 			jsr	write_char 
-			bra	intro3_loop: 
+			bra	intro3_loop
 
 input_loop:		
 			
@@ -73,9 +70,9 @@ r_index:		ds.l	1
 i: 			ds.l	1
 error:			ds.l	1 
 
-intro1:			dc.b	"This program converts numbers in Improved Roman notation to Arabic notation.",NULL,CR,LF 
-intro2: 		dc.b	"Input is limited to UPPER case Roman digits only.",NULL,CR,LF 
-intro3:			dc.b	"To exit the program type only the Enter key.",NULL,CR,LF 
+intro1:			dc.b	"This program converts numbers in Improved Roman notation to Arabic notation.",CR,LF,NULL 
+intro2: 		dc.b	"Input is limited to UPPER case Roman digits only.",CR,LF,NULL 
+intro3:			dc.b	"To exit the program type only the Enter key.",CR,LF,NULL 
 
 newline:		dc.b	CR,LF,NULL 
 
