@@ -53,7 +53,7 @@ newline_loop:
 			move.b	(a7)+,d0 
 			beq	input_loop
 			jsr	write_char 
-			bra	newline_loop: 
+			bra	newline_loop
 
 input_loop:		
 			move.b	(a4)+,d0 
