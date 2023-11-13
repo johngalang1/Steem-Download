@@ -24,9 +24,13 @@ MAX_TIMES		equ	9
 
 start:
 ;Print introduction statements 
+			lea	string,a0
 			lea	intro1,a1
 			lea	intro2,a2
-			lea	intro3,a3
+			lea	intro3,a3  
+			lea	input_str,a4  
+			lea	newline,a7 
+			clr.l	d0
 
 intro1_loop:		
 			move.b	(a1)+,d0  
@@ -41,15 +45,34 @@ intro2_loop:
 
 intro3_loop:
 			move.b	(a3)+,d0  
-			beq	input_loop
+			beq	newline_loop
 			jsr	write_char 
 			bra	intro3_loop
 
+newline_loop:		
+			move.b	(a7)+,d0 
+			beq	input_loop
+			jsr	write_char 
+			bra	newline_loop: 
+
 input_loop:		
+			move.b	(a4)+,d0 
+			beq	get_input
+			jsr	write_char 
+			bra	input_loop	
+get_input:  		
+			jsr	read_char 
+			move.b	d0,d1    
+			and.l	#$FF,d1	 
+			cmp.b	#CR,d1
+			beq	done
+			move.b	d1,(a0)+
+			bra	get_input
+
+done:			nop
 			
-
-
-
+			
+			
 ;Declarations
 all_roman:		ds.w	ROMAN_DIGIT*MAX_ROMANS
 			dc.w 	'I',1,-1,0,0,0,MAX_DIGIT_COUNT	 
