@@ -22,11 +22,34 @@ MODIFIED		equ	7
 MODIFIER		equ	8	
 MAX_TIMES		equ	9	
 
+start:
 ;Print introduction statements 
-
 			lea	intro1,a1
-		
+			lea	intro2,a2
+			lea	intro3,a3
 
+intro1_loop:		
+			move.b	(a1)+,d0  
+			cmp.b	#LF,d0
+			beq	intro2_loop
+			jsr	write_char 
+			bra	intro1_loop:
+intro2_loop: 
+			move.b	(a1)+,d0  
+			cmp.b	#LF,d0
+			beq	intro3_loop
+			jsr	write_char 
+			bra	intro2_loop:
+
+intro3_loop:
+			move.b	(a1)+,d0  
+			cmp.b	#LF,d0
+			beq	input_loop
+			jsr	write_char 
+			bra	intro3_loop: 
+
+input_loop:		
+			
 
 
 
@@ -53,6 +76,7 @@ error:			ds.l	1
 intro1:			dc.b	"This program converts numbers in Improved Roman notation to Arabic notation.",NULL,CR,LF 
 intro2: 		dc.b	"Input is limited to UPPER case Roman digits only.",NULL,CR,LF 
 intro3:			dc.b	"To exit the program type only the Enter key.",NULL,CR,LF 
+
 newline:		dc.b	CR,LF,NULL 
 
 input_str:		dc.b	"Input a Roman number (Press 'Q' to exit): ",NULL
