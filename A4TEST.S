@@ -29,7 +29,6 @@ start:
 			lea	intro2,a2
 			lea	intro3,a3  
 			lea	input_str,a4  
-			lea	newline,a7 
 			clr.l	d0
 
 intro1_loop:		
@@ -45,9 +44,12 @@ intro2_loop:
 
 intro3_loop:
 			move.b	(a3)+,d0  
-			beq	newline_loop
+			beq	newline_print
 			jsr	write_char 
-			bra	intro3_loop
+			bra	intro3_loop 
+
+newline_print:	
+			lea	newline,a7 
 
 newline_loop:		
 			move.b	(a7)+,d0 
