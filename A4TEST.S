@@ -23,6 +23,124 @@ MODIFIER		equ	8
 MAX_TIMES		equ	9	
 
 start:
+;Setting up array 
+ 			lea	all_roman,a7 
+			clr.l	d0 	;counter for array 
+			
+zero:		
+			move.b	#'I',d1 
+			move.b	d1,DIGIT(a7,d0.w) 
+			move.w	#1,d1 
+			move.w	d1,ARAB_VALUE(a7,d0.w) 
+			move.w	#-1,d1 
+			move.w	d1,SUBTRACTOR_INDEX(a7,d0.w)  
+			move.b	#0,d1 
+			move.b	d1,COUNT(a7,d0.w)  
+			move.b	#FALSE,d1 
+			move.b	d1,MODIFIED(a7,d0.w) 
+			move.b	#FALSE,d1 
+			move.b	d1,MODIFIER(a7,d0.w) 
+			move.b	#MAX_DIGIT_COUNT,d1 
+			move.b	d1,MAX_TIMES(a7,d0.w) 
+			add.w	#ROMAN_DIGIT,d0
+
+first:
+			move.b	#'V',d1 
+			move.b	d1,DIGIT(a7,d0.w) 
+			move.w	#5,d1 
+			move.w	d1,ARAB_VALUE(a7,d0.w) 
+			move.w	#0,d1 
+			move.w	d1,SUBTRACTOR_INDEX(a7,d0.w)  
+			move.b	#0,d1 
+			move.b	d1,COUNT(a7,d0.w)  
+			move.b	#FALSE,d1 
+			move.b	d1,MODIFIED(a7,d0.w) 
+			move.b	#FALSE,d1 
+			move.b	d1,MODIFIER(a7,d0.w) 
+			move.b	#1,d1 
+			move.b	d1,MAX_TIMES(a7,d0.w) 
+			add.w	#ROMAN_DIGIT,d0
+second:
+			move.b	#'X',d1 
+			move.b	d1,DIGIT(a7,d0.w) 
+			move.w	#10,d1 
+			move.w	d1,ARAB_VALUE(a7,d0.w) 
+			move.w	#0,d1 
+			move.w	d1,SUBTRACTOR_INDEX(a7,d0.w)  
+			move.b	#0,d1 
+			move.b	d1,COUNT(a7,d0.w)  
+			move.b	#FALSE,d1 
+			move.b	d1,MODIFIED(a7,d0.w) 
+			move.b	#FALSE,d1 
+			move.b	d1,MODIFIER(a7,d0.w) 
+			move.b	#MAX_DIGIT_COUNT,d1 
+			move.b	d1,MAX_TIMES(a7,d0.w) 
+			add.w	#ROMAN_DIGIT,d0
+third:
+			move.b	#'L',d1 
+			move.b	d1,DIGIT(a7,d0.w) 
+			move.w	#50,d1 
+			move.w	d1,ARAB_VALUE(a7,d0.w) 
+			move.w	#2,d1 
+			move.w	d1,SUBTRACTOR_INDEX(a7,d0.w)  
+			move.b	#0,d1 
+			move.b	d1,COUNT(a7,d0.w)  
+			move.b	#FALSE,d1 
+			move.b	d1,MODIFIED(a7,d0.w) 
+			move.b	#FALSE,d1 
+			move.b	d1,MODIFIER(a7,d0.w) 
+			move.b	#1,d1 
+			move.b	d1,MAX_TIMES(a7,d0.w) 
+			add.w	#ROMAN_DIGIT,d0
+fourth:
+			move.b	#'C',d1 
+			move.b	d1,DIGIT(a7,d0.w) 
+			move.w	#100,d1 
+			move.w	d1,ARAB_VALUE(a7,d0.w) 
+			move.w	#2,d1 
+			move.w	d1,SUBTRACTOR_INDEX(a7,d0.w)  
+			move.b	#0,d1 
+			move.b	d1,COUNT(a7,d0.w)  
+			move.b	#FALSE,d1 
+			move.b	d1,MODIFIED(a7,d0.w) 
+			move.b	#FALSE,d1 
+			move.b	d1,MODIFIER(a7,d0.w) 
+			move.b	#MAX_DIGIT_COUNT,d1 
+			move.b	d1,MAX_TIMES(a7,d0.w) 
+			add.w	#ROMAN_DIGIT,d0
+fifth:
+			move.b	#'D',d1 
+			move.b	d1,DIGIT(a7,d0.w) 
+			move.w	#500,d1 
+			move.w	d1,ARAB_VALUE(a7,d0.w) 
+			move.w	#4,d1 
+			move.w	d1,SUBTRACTOR_INDEX(a7,d0.w)  
+			move.b	#0,d1 
+			move.b	d1,COUNT(a7,d0.w)  
+			move.b	#FALSE,d1 
+			move.b	d1,MODIFIED(a7,d0.w) 
+			move.b	#FALSE,d1 
+			move.b	d1,MODIFIER(a7,d0.w) 
+			move.b	#1,d1 
+			move.b	d1,MAX_TIMES(a7,d0.w) 
+			add.w	#ROMAN_DIGIT,d0
+sixth:
+			move.b	#'M',d1 
+			move.b	d1,DIGIT(a7,d0.w) 
+			move.w	#1000,d1 
+			move.w	d1,ARAB_VALUE(a7,d0.w) 
+			move.w	#4,d1 
+			move.w	d1,SUBTRACTOR_INDEX(a7,d0.w)  
+			move.b	#0,d1 
+			move.b	d1,COUNT(a7,d0.w)  
+			move.b	#FALSE,d1 
+			move.b	d1,MODIFIED(a7,d0.w) 
+			move.b	#FALSE,d1 
+			move.b	d1,MODIFIER(a7,d0.w) 
+			move.b	#MAX_DIGIT_COUNT,d1 
+			move.b	d1,MAX_TIMES(a7,d0.w) 
+			add.w	#ROMAN_DIGIT,d0
+
 ;Print introduction statements 
 			lea	string,a0
 			lea	intro1,a1
@@ -30,7 +148,6 @@ start:
 			lea	intro3,a3  
 			lea	input_str,a4  
 			clr.l	d0
-			clr.l	d1			;counter
 
 intro1_loop:		
 			move.b	(a1)+,d0  
@@ -42,22 +159,18 @@ intro2_loop:
 			beq	intro3_loop
 			jsr	write_char 
 			bra	intro2_loop
-
 intro3_loop:
 			move.b	(a3)+,d0  
 			beq	newline_print
 			jsr	write_char 
 			bra	intro3_loop 
-
 newline_print:	
-			lea	newline,a7 
-
+			lea	newline,a5
 newline_loop:		
-			move.b	(a7)+,d0 
+			move.b	(a5)+,d0 
 			beq	input_loop
 			jsr	write_char 
 			bra	newline_loop
-
 input_loop:		
 			move.b	(a4)+,d0 
 			beq	get_input
@@ -68,40 +181,52 @@ get_input:
 			move.b	d0,d1    
 			and.l	#$FF,d1	 
 			cmp.b	#CR,d1
-			beq	start
+			beq	main_prog
+			add.b	#1,d7		;counter for char inputs
 			move.b	d1,(a0)+
 			bra	get_input
 
-start: 			
+main_prog: 		
 			
-			lea	a0,a1
-			move.b	a1,d1
+			suba.l	d7,a0		;Go to the 0th index	
+			move.b	(a0),d1
 			cmp.b	#QUIT,d1 
-			
-			
-			
-			
-			
-			
+			beq	done
+		
+			move.b	#0,d2		 ;sum
+			move.b	#0,d3		 ;s_index
+			move.b	#MAX_ROMANS-1,d4 ;r_last
+			move.b	#NO_ERROR,d5	 ;error 
+
+while1:						
+			adda.l	d3,a0		
+			move.b	(a0),d1		
+			cmp.b	#NULL,d1
+			beq	done
+			cmp.b	#NO_ERROR,d5 
+			bne	done
+			move.b	#MAX_ROMANS-1,d6 ;r_index
+
+while2:			 			
+			tst.b	d6 		
+			blt	r_index_lt_0
+ 			move.b	d6,d7 
+			mulu	#10,d7
+			move.b	DIGIT(a7,d7.w),d0
+			cmp.b	d0,d1  
+			beq	r_index_lt_0
+			sub.b	#1,d6
+			bra	while2
+r_index_lt_0: 
+			jsr	exit
+done:
+			jsr	exit
+
+
 ;Declarations
-all_roman:		ds.w	ROMAN_DIGIT*MAX_ROMANS
-			dc.w 	'I',1,-1,0,0,0,MAX_DIGIT_COUNT	 
-           		dc.w 	'V',5,0,0,0,0,1
-           		dc.w 	'X',10,0,0,0,0,MAX_DIGIT_COUNT
-           		dc.w 	'L',50,2,0,0,0,1
-           		dc.w 	'C',100,2,0,0,0,MAX_DIGIT_COUNT
-           		dc.w 	'D',500,4,0,0,0,1
-           		dc.w 	'M',1000,4,0,0,0,MAX_DIGIT_COUNT 
+all_roman:		ds.b	ROMAN_DIGIT*MAX_ROMANS
 
 string:			ds.b	MAX_STRING+1  
-
-;Plan is to move these guys into data registers 
-sum: 			ds.l	1
-s_index:		ds.l	1
-r_last: 		ds.l	1
-r_index:		ds.l	1
-i: 			ds.l	1
-error:			ds.l	1 
 
 intro1:			dc.b	"This program converts numbers in Improved Roman notation to Arabic notation.",CR,LF,NULL 
 intro2: 		dc.b	"Input is limited to UPPER case Roman digits only.",CR,LF,NULL 
@@ -110,7 +235,6 @@ intro3:			dc.b	"To exit the program type only the Enter key.",CR,LF,NULL
 newline:		dc.b	CR,LF,NULL 
 
 input_str:		dc.b	"Input a Roman number (Press 'Q' to exit): ",NULL
-
 
 
 ;----- SUBROUTINE: read_char -----
