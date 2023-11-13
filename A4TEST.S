@@ -9,7 +9,7 @@ MAX_ROMANS		equ	7
 MAX_STRING		equ	20 
 NO_ERROR		equ	0 
 MAX_DIGIT_COUNT		equ	3 
-C_NULL			equ	'\0'
+NULL			equ	0
 QUIT			equ	'Q' 
 
 ;Roman_digit structure 
@@ -31,14 +31,14 @@ MAX_TIMES		equ	9
 
 
 ;Declarations
-all_roman:		ds.b	ROMAN_DIGIT*MAX_ROMANS
-			dc.b 	'I',1,-1,0,0,0,MAX_DIGIT_COUNT	 
-           		dc.b 	'V',5,0,0,0,0,1
-           		dc.b 	'X',10,0,0,0,0,MAX_DIGIT_COUNT
-           		dc.b 	'L',50,2,0,0,0,1
-           		dc.b 	'C',100,2,0,0,0,MAX_DIGIT_COUNT
-           		dc.b 	'D',500,4,0,0,0,1
-           		dc.b 	'M',1000,4,0,0,0,MAX_DIGIT_COUNT 
+all_roman:		ds.w	ROMAN_DIGIT*MAX_ROMANS
+			dc.w 	'I',1,-1,0,0,0,MAX_DIGIT_COUNT	 
+           		dc.w 	'V',5,0,0,0,0,1
+           		dc.w 	'X',10,0,0,0,0,MAX_DIGIT_COUNT
+           		dc.w 	'L',50,2,0,0,0,1
+           		dc.w 	'C',100,2,0,0,0,MAX_DIGIT_COUNT
+           		dc.w 	'D',500,4,0,0,0,1
+           		dc.w 	'M',1000,4,0,0,0,MAX_DIGIT_COUNT 
 
 string:			ds.b	MAX_STRING+1  
 
@@ -55,7 +55,7 @@ intro2: 		dc.b	"Input is limited to UPPER case Roman digits only.",NULL,CR,LF
 intro3:			dc.b	"To exit the program type only the Enter key.",NULL,CR,LF 
 newline:		dc.b	CR,LF,NULL 
 
-input_str:		dc.b	""Input a Roman number (Press 'Q' to exit): ",NULL
+input_str:		dc.b	"Input a Roman number (Press 'Q' to exit): ",NULL
 
 
 
