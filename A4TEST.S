@@ -30,6 +30,7 @@ start:
 			lea	intro3,a3  
 			lea	input_str,a4  
 			clr.l	d0
+			clr.l	d1			;counter
 
 intro1_loop:		
 			move.b	(a1)+,d0  
@@ -67,11 +68,18 @@ get_input:
 			move.b	d0,d1    
 			and.l	#$FF,d1	 
 			cmp.b	#CR,d1
-			beq	done
+			beq	start
 			move.b	d1,(a0)+
 			bra	get_input
 
-done:			nop
+start: 			
+			
+			lea	a0,a1
+			move.b	a1,d1
+			cmp.b	#QUIT,d1 
+			
+			
+			
 			
 			
 			
