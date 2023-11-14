@@ -135,12 +135,13 @@ get_input:
 			bra	get_input
 
 main_prog: 					;while(string[0] != QUIT)
+			clr.l	d0
 			suba.l	d7,a0		;Go to the 0th index	
 			move.b	(a0),d1
 			cmp.b	#QUIT,d1 
 			beq	done
 		
-			move.b	#0,d2		 ;sum
+			move.w	#0,d2		 ;sum
 			move.b	#0,d3		 ;s_index
 			move.b	#MAX_ROMANS-1,d4 ;r_last
 			move.b	#NO_ERROR,d5	 ;error 
@@ -156,21 +157,94 @@ while1:						;while ((string[s_index] != C_NULL) && error == NO_ERROR)
 
 while2:			 			;while (r_index >= 0 && string[s_index] != all_roman[r_index].digit)
 			tst.b	d6 		
-			blt	r_less_0
- 			move.b	d6,d7 
-			muls	#10,d7
-			move.b	DIGIT(a6,d7.w),d0
+			blt	r_i_less_0
+			mulu	#10,d6
+			move.b	DIGIT(a6,d6.w),d0
+			divu	#10,d6
 			cmp.b	d0,d1  
-			beq	r_less_0 
+			beq	r_i_less_0 
 			sub.b	#1,d6
 			bra	while2
-r_less_0: 					;(r_index < 0)
+r_i_less_0: 					;(r_index < 0)
 			tst.b	d6 
-			bge	else1
+			bge	r_i_greater_r_l
 			move.b	#1,d5		;error = 1
 			bra	check_error
-else1: 
-			nop
+
+r_i_greater_r_l: 				;(r_index > r_last)
+			cmp.b	d4,d6
+			ble	else2 
+
+			mulu	#10,d6
+			move.b	SUBTRACTOR_INDEX(a6,d6.w),d0  
+			divu	#10,d6
+			cmp.b	d4,d0 
+			beq	else3 
+			move.b	#2,d5 
+			bra	check_error
+else3:			
+			mulu	#10,d6
+			move.w	ARAB_VALUE(a6,d6.w),d0 
+			add.w	d0,d2 			;sum = sum + all_roman[r_index].arab_value   
+			mulu	#10,d4			
+			move.w	ARAB_VALUE(a6,d4.w),d0 
+			divu	#10,d4
+			mulu	#2,d0 
+			sub.w	d0,d3			;sum = sum - 2 * all_roman[r_last].arab_value; 
+
+			move.b	SUBTRACTOR_INDEX(a6,d6.w),d7 
+			muls	#10,d7 
+			sub.b	#1,COUNT(a6,d7.w) 
+			add.b	#1,COUNT(a6,d6.w) 
+			move.b	#TRUE,MODIFIED(a6,d6.w) 
+			move.b	#TRUE,MODIFIER(a6,d7.w)
+			clr.l	d7
+			divu	#10,d6 
+			bra	check_error
+else2: 							;(all_roman[r_index].modifier)
+			mulu	#10,d6
+ 			move.b	MODIFIER(a6,d6.w),d0 
+			divu	#10,d6
+			tst.b	d0 
+			beq	else4 
+			move.b	#3,d5
+			bra	check_error 
+
+else4:							
+			mulu	#10,d6 
+			move.b	SUBTRACTOR_INDEX(a6,d6.w),d0 
+			add.b	#10,d6 
+			move.b	SUBTRACTOR_INDEX(a6,d6.w),d7 
+			cmp.b	d7,d0 
+			bne	else5 
+
+			sub.b	#10,d6  
+			muls	#10,d7
+			move.b	MODIFIER(a6,d7.w),d0 
+			tst.b	d0 
+			beq	else5 
+
+			divu	#10,d6
+			move.b	#4,d5 
+			bra	check_error
+
+else5: 			
+			mulu	#10,d6
+			add.b	#1,COUNT(a6,d6.w) 
+			move.b	COUNT(a6,d6.w),d0 
+			move.b	MAX_TIMES(a6,d6.w),d7 
+			cmp.b	d7,d0
+			bgt	else6
+
+			add.w	ARAB_VALUE(a6,d6.w),d2 
+			divu	#10,d6 
+			move.b	d6,d4
+			bra	check_error
+			
+else6:
+			move.b	#5,d5 
+			bra	check_error
+
 check_error:					;(error == NO_ERROR)
 			cmp.b	#NO_ERROR,d5
 			bne	while1 
@@ -266,6 +340,7 @@ reset_loop:
 			move.b	#FALSE,MODIFIER(a6,d7.w)  
 			add.b	#10,d7
 			dbra	d6,reset_loop
+
 			clr.l 	d0
 			clr.l 	d1
 			clr.l 	d2
