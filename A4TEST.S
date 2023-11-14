@@ -351,8 +351,7 @@ reset_loop:
 			clr.l 	d7 
  			lea	input_str,a4  
 			bra	newline_print
-			
-
+		
 done:
 			jsr	exit
 
