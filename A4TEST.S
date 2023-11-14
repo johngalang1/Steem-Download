@@ -171,14 +171,12 @@ r_less_0: 					;(r_index < 0)
 			bra	check_error
 else1: 
 			nop
-
 check_error:					;(error == NO_ERROR)
 			cmp.b	#NO_ERROR,d5
 			bne	while1 
 			add.b	#1,d3 
 			move.b	d6,d4
 			bra	while1
-
 if_error					;if(error)
 			tst.b	d5 
 			beq	no_error
@@ -187,23 +185,98 @@ print_intro_err:
 			move.b	(a1)+,d0  
 			beq	position_err
 			jsr	write_char 
-			bra	print_intro_err:
+			bra	print_intro_err
 position_err:		
 			move.b	d3,d0 
+			add.b	#'0',d0
 			jsr	write_char 
-			move.b	'(',d0
+			move.b	#'(',d0
 			jsr	write_char 
 			move.b	d1,d0 
 			jsr	write_char 
-			move.b	')',d0
+			move.b	#')',d0
 			jsr	write_char 			
 			move.b	#CR,d0 
 			jsr	write_char 
 			move.b	#LF,d0
-			jsr	write_char 			
-			
+			jsr	write_char 
+error_case:		
+			cmp.b	#1,d5 
+			beq	case1
+			cmp.b	#2,d5 
+			beq	case2
+			cmp.b	#3,d5 
+			beq	case3 
+			cmp.b	#4,d5 
+			beq	case4 
+			cmp.b	#5,d5 
+			beq	case5 
+			bra	default
+case1:		
+			lea	error1,a1
+case1_print:
+			move.b	(a1)+,d0  
+			beq	reset
+			jsr	write_char 
+			bra	case1_print
+case2:
+			lea	error2,a1
+case2_print:
+			move.b	(a1)+,d0  
+			beq	reset
+			jsr	write_char 
+			bra	case2_print
+case3:			
+			lea	error3,a1	
+case3_print:
+			move.b	(a1)+,d0  
+			beq	reset
+			jsr	write_char 
+			bra	case3_print
+case4:			
+			lea	error4,a1
+case4_print:
+			move.b	(a1)+,d0  
+			beq	reset
+			jsr	write_char 
+			bra	case4_print
+case5:			
+			lea	error5,a1
+case5_print:
+			move.b	(a1)+,d0  
+			beq	reset
+			jsr	write_char 
+			bra	case5_print
+default:		
+			lea	default_error,a1
+default_print:
+			move.b	(a1)+,d0  
+			beq	reset
+			jsr	write_char 
+			bra	default_print
 no_error:					;print sum
 			nop
+
+reset: 			
+			move.b	#MAX_ROMANS-1,d7
+			move.w	#0,d6
+reset_loop:
+			move.b	#0,COUNT(a6,d6.w)
+			move.b	#FALSE,MODIFIED(a6,d6.w) 
+			move.b	#FALSE,MODIFIER(a6,d6.w)  
+			add.b	#10,d6 
+			dbra	d7,reset_loop
+			clr.l 	d0
+			clr.l 	d1
+			clr.l 	d2
+			clr.l 	d3
+			clr.l 	d4
+			clr.l 	d5
+			clr.l 	d6
+			clr.l 	d7 
+ 			lea	input_str,a4  
+			bra	newline_print
+			
 
 done:
 			jsr	exit
@@ -218,7 +291,7 @@ intro1:			dc.b	"This program converts numbers in Improved Roman notation to Arab
 intro2: 		dc.b	"Input is limited to UPPER case Roman digits only.",CR,LF,NULL 
 intro3:			dc.b	"To exit the program type only the Enter key.",CR,LF,NULL 
 
-intro_error:		dc.b	"Character at position ",NULL
+intro_error:		dc.b	CR,LF,"Character at position ",NULL
 
 error1:			dc.b	"is not a valid Roman digit",CR,LF,NULL
 
@@ -228,9 +301,9 @@ error3:			dc.b	"has been used as a modifier and can't be used unmodified",CR,LF,
 
 error4:			dc.b	"combination of the modified prior digit and this digit is",CR,LF,"an invalid Roman number",CR,LF,NULL
 
-error5:			dc.b	"thas exceeded the maximum occurrences for this digit",CR,LF,NULL 
+error5:			dc.b	"has exceeded the maximum occurrences for this digit",CR,LF,NULL 
 
-else_error:		dc.b	"In error handling with an invalid error code",CR,LF,NULL
+default_error:		dc.b	"In error handling with an invalid error code",CR,LF,NULL
 
 newline:		dc.b	CR,LF,NULL 
 
