@@ -215,7 +215,8 @@ else4:
 			move.b	SUBTRACTOR_INDEX(a6,d6.w),d0 
 			add.b	#10,d6 
 			move.b	SUBTRACTOR_INDEX(a6,d6.w),d7 
-			cmp.b	d7,d0 
+			divu	#10,d6
+			cmp.b	d7,d0  
 			bne	else5 
 
 			sub.b	#10,d6  
@@ -224,7 +225,6 @@ else4:
 			tst.b	d0 
 			beq	else5 
 
-			divu	#10,d6
 			move.b	#4,d5 
 			bra	check_error
 
