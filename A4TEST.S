@@ -149,9 +149,9 @@ while1:						;while ((string[s_index] != C_NULL) && error == NO_ERROR)
 			adda.l	d3,a0		
 			move.b	(a0),d1		
 			cmp.b	#NULL,d1
-			beq	error_case
+			beq	if_error
 			cmp.b	#NO_ERROR,d5 
-			bne	error_case
+			bne	if_error
 			move.b	#MAX_ROMANS-1,d6 ;r_index
 
 while2:			 			;while (r_index >= 0 && string[s_index] != all_roman[r_index].digit)
@@ -170,6 +170,7 @@ r_less_0: 					;(r_index < 0)
 			move.b	#1,d5		;error = 1
 			bra	check_error
 else1: 
+			nop
 
 check_error:					;(error == NO_ERROR)
 			cmp.b	#NO_ERROR,d5
@@ -178,11 +179,29 @@ check_error:					;(error == NO_ERROR)
 			move.b	d6,d4
 			bra	while1
 
-error_case:					;if(error)
+if_error					;if(error)
 			tst.b	d5 
 			beq	no_error
-			nop
-
+			lea	intro_error,a1
+print_intro_err:
+			move.b	(a1)+,d0  
+			beq	position_err
+			jsr	write_char 
+			bra	print_intro_err:
+position_err:		
+			move.b	d3,d0 
+			jsr	write_char 
+			move.b	'(',d0
+			jsr	write_char 
+			move.b	d1,d0 
+			jsr	write_char 
+			move.b	')',d0
+			jsr	write_char 			
+			move.b	#CR,d0 
+			jsr	write_char 
+			move.b	#LF,d0
+			jsr	write_char 			
+			
 no_error:					;print sum
 			nop
 
@@ -198,6 +217,8 @@ string:			ds.b	MAX_STRING+1
 intro1:			dc.b	"This program converts numbers in Improved Roman notation to Arabic notation.",CR,LF,NULL 
 intro2: 		dc.b	"Input is limited to UPPER case Roman digits only.",CR,LF,NULL 
 intro3:			dc.b	"To exit the program type only the Enter key.",CR,LF,NULL 
+
+intro_error:		dc.b	"Character at position ",NULL
 
 error1:			dc.b	"is not a valid Roman digit",CR,LF,NULL
 
