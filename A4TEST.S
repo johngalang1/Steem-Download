@@ -22,7 +22,72 @@ MODIFIED		equ	7
 MODIFIER		equ	8	
 MAX_TIMES		equ	9	
 
-start:
+start: 
+			lea	all_roman,a6
+			clr.l	d0
+zero:		
+			move.b	#'I',DIGIT(a6,d0.w) 
+			move.w	#1,ARAB_VALUE(a6,d0.w) 
+			move.w	#-1,SUBTRACTOR_INDEX(a6,d0.w)  
+			move.b	#0,COUNT(a6,d0.w)  
+			move.b	#FALSE,MODIFIED(a6,d0.w) 
+			move.b	#FALSE,MODIFIER(a6,d0.w) 
+			move.b	#MAX_DIGIT_COUNT,MAX_TIMES(a6,d0.w) 
+			add.w	#ROMAN_DIGIT,d0
+first:
+			move.b	#'V',DIGIT(a6,d0.w) 
+			move.w	#5,ARAB_VALUE(a6,d0.w) 
+			move.w	#0,SUBTRACTOR_INDEX(a6,d0.w)  
+			move.b	#0,COUNT(a6,d0.w)  
+			move.b	#FALSE,MODIFIED(a6,d0.w) 
+			move.b	#FALSE,MODIFIER(a6,d0.w) 
+			move.b	#1,MAX_TIMES(a6,d0.w) 
+			add.w	#ROMAN_DIGIT,d0
+second:
+			move.b	#'X',DIGIT(a6,d0.w) 
+			move.w	#10,ARAB_VALUE(a6,d0.w) 
+			move.w	#0,SUBTRACTOR_INDEX(a6,d0.w)  
+			move.b	#0,COUNT(a6,d0.w)  
+			move.b	#FALSE,MODIFIED(a6,d0.w) 
+			move.b	#FALSE,MODIFIER(a6,d0.w) 
+			move.b	#MAX_DIGIT_COUNT,MAX_TIMES(a6,d0.w) 
+			add.w	#ROMAN_DIGIT,d0
+third:
+			move.b	#'L',DIGIT(a6,d0.w) 
+			move.w	#50,ARAB_VALUE(a6,d0.w) 
+			move.w	#2,SUBTRACTOR_INDEX(a6,d0.w)  
+			move.b	#0,COUNT(a6,d0.w)  
+			move.b	#FALSE,MODIFIED(a6,d0.w) 
+			move.b	#FALSE,MODIFIER(a6,d0.w) 
+			move.b	#1,MAX_TIMES(a6,d0.w) 
+			add.w	#ROMAN_DIGIT,d0
+fourth:
+			move.b	#'C',DIGIT(a6,d0.w) 
+			move.w	#100,ARAB_VALUE(a6,d0.w) 
+			move.w	#2,SUBTRACTOR_INDEX(a6,d0.w)  
+			move.b	#0,COUNT(a6,d0.w)  
+			move.b	#FALSE,MODIFIED(a6,d0.w) 
+			move.b	#FALSE,MODIFIER(a6,d0.w) 
+			move.b	#MAX_DIGIT_COUNT,MAX_TIMES(a6,d0.w) 
+			add.w	#ROMAN_DIGIT,d0
+fifth:
+			move.b	#'D',DIGIT(a6,d0.w) 
+			move.w	#500,ARAB_VALUE(a6,d0.w) 
+			move.w	#4,SUBTRACTOR_INDEX(a6,d0.w)  
+			move.b	#0,COUNT(a6,d0.w)  
+			move.b	#FALSE,MODIFIED(a6,d0.w) 
+			move.b	#FALSE,MODIFIER(a6,d0.w) 
+			move.b	#1,MAX_TIMES(a6,d0.w) 
+			add.w	#ROMAN_DIGIT,d0
+sixth:
+			move.b	#'M',DIGIT(a6,d0.w) 
+			move.w	#1000,ARAB_VALUE(a6,d0.w) 
+			move.w	#4,SUBTRACTOR_INDEX(a6,d0.w)  
+			move.b	#0,COUNT(a6,d0.w)  
+			move.b	#FALSE,MODIFIED(a6,d0.w) 
+			move.b	#FALSE,MODIFIER(a6,d0.w) 
+			move.b	#MAX_DIGIT_COUNT,MAX_TIMES(a6,d0.w) 
+			add.w	#ROMAN_DIGIT,d0
 
 ;Print introduction statements 
 			lea	string,a0
@@ -69,7 +134,7 @@ get_input:
 			move.b	d1,(a0)+
 			bra	get_input
 
-main_prog: 		
+main_prog: 					;while(string[0] != QUIT)
 			suba.l	d7,a0		;Go to the 0th index	
 			move.b	(a0),d1
 			cmp.b	#QUIT,d1 
@@ -80,7 +145,7 @@ main_prog:
 			move.b	#MAX_ROMANS-1,d4 ;r_last
 			move.b	#NO_ERROR,d5	 ;error 
 
-while1:						
+while1:						;while ((string[s_index] != C_NULL) && error == NO_ERROR)		
 			adda.l	d3,a0		
 			move.b	(a0),d1		
 			cmp.b	#NULL,d1
@@ -89,12 +154,12 @@ while1:
 			bne	done
 			move.b	#MAX_ROMANS-1,d6 ;r_index
 
-while2:			 			
+while2:			 			;while (r_index >= 0 && string[s_index] != all_roman[r_index].digit)
 			tst.b	d6 		
 			blt	r_index_lt_0
  			move.b	d6,d7 
 			muls	#10,d7
-			move.b	DIGIT(a7,d7),d0
+			move.b	DIGIT(a6,d7),d0
 			cmp.b	d0,d1  
 			beq	r_index_lt_0
 			sub.b	#1,d6
