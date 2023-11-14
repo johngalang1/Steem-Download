@@ -176,7 +176,7 @@ r_i_greater_r_l: 				;(r_index > r_last)
 			ble	else2 
 
 			mulu	#10,d6
-			move.b	SUBTRACTOR_INDEX(a6,d6.w),d0  
+			move.w	SUBTRACTOR_INDEX(a6,d6.w),d0  
 			divu	#10,d6
 			cmp.b	d4,d0 
 			beq	else3 
@@ -192,7 +192,7 @@ else3:
 			mulu	#2,d0 
 			sub.w	d0,d3			;sum = sum - 2 * all_roman[r_last].arab_value; 
 
-			move.b	SUBTRACTOR_INDEX(a6,d6.w),d7 
+			move.w	SUBTRACTOR_INDEX(a6,d6.w),d7 
 			muls	#10,d7 
 			sub.b	#1,COUNT(a6,d7.w) 
 			add.b	#1,COUNT(a6,d6.w) 
@@ -212,14 +212,14 @@ else2: 							;(all_roman[r_index].modifier)
 
 else4:							
 			mulu	#10,d6 
-			move.b	SUBTRACTOR_INDEX(a6,d6.w),d0 
+			move.w	SUBTRACTOR_INDEX(a6,d6.w),d0 
 			add.b	#10,d6 
-			move.b	SUBTRACTOR_INDEX(a6,d6.w),d7 
+			move.w	SUBTRACTOR_INDEX(a6,d6.w),d7 
+			sub.b	#10,d6
 			divu	#10,d6
 			cmp.b	d7,d0  
 			bne	else5 
-
-			sub.b	#10,d6  
+ 
 			muls	#10,d7
 			move.b	MODIFIER(a6,d7.w),d0 
 			tst.b	d0 
