@@ -159,7 +159,7 @@ while2:			 			;while (r_index >= 0 && string[s_index] != all_roman[r_index].digi
 			blt	r_less_0
  			move.b	d6,d7 
 			muls	#10,d7
-			move.b	DIGIT(a6,d7),d0
+			move.b	DIGIT(a6,d7.w),d0
 			cmp.b	d0,d1  
 			beq	r_less_0 
 			sub.b	#1,d6
@@ -258,14 +258,14 @@ no_error:					;print sum
 			nop
 
 reset: 			
-			move.b	#MAX_ROMANS-1,d7
-			move.w	#0,d6
+			move.l	#MAX_ROMANS-1,d6
+			clr.w	d7
 reset_loop:
-			move.b	#0,COUNT(a6,d6.w)
-			move.b	#FALSE,MODIFIED(a6,d6.w) 
-			move.b	#FALSE,MODIFIER(a6,d6.w)  
-			add.b	#10,d6 
-			dbra	d7,reset_loop
+			move.b	#0,COUNT(a6,d7.w)
+			move.b	#FALSE,MODIFIED(a6,d7.w) 
+			move.b	#FALSE,MODIFIER(a6,d7.w)  
+			add.b	#10,d7
+			dbra	d6,reset_loop
 			clr.l 	d0
 			clr.l 	d1
 			clr.l 	d2
