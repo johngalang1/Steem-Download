@@ -156,16 +156,27 @@ while1:						;while ((string[s_index] != C_NULL) && error == NO_ERROR)
 
 while2:			 			;while (r_index >= 0 && string[s_index] != all_roman[r_index].digit)
 			tst.b	d6 		
-			blt	r_index_lt_0
+			blt	r_less_0
  			move.b	d6,d7 
 			muls	#10,d7
 			move.b	DIGIT(a6,d7),d0
 			cmp.b	d0,d1  
-			beq	r_index_lt_0
+			beq	r_less_0 
 			sub.b	#1,d6
 			bra	while2
-r_index_lt_0: 
-			jsr	exit
+r_less_0: 					;(r_index < 0)
+			tst.b	d6 
+			bge	else 
+			move.b	#1,d5		;error = 1
+			bra	after
+else1: 
+				
+
+
+
+after:		
+			nop
+
 done:
 			jsr	exit
 
