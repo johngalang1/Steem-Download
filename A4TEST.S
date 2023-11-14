@@ -149,9 +149,9 @@ while1:						;while ((string[s_index] != C_NULL) && error == NO_ERROR)
 			adda.l	d3,a0		
 			move.b	(a0),d1		
 			cmp.b	#NULL,d1
-			beq	done
+			beq	error_case
 			cmp.b	#NO_ERROR,d5 
-			bne	done
+			bne	error_case
 			move.b	#MAX_ROMANS-1,d6 ;r_index
 
 while2:			 			;while (r_index >= 0 && string[s_index] != all_roman[r_index].digit)
@@ -166,15 +166,24 @@ while2:			 			;while (r_index >= 0 && string[s_index] != all_roman[r_index].digi
 			bra	while2
 r_less_0: 					;(r_index < 0)
 			tst.b	d6 
-			bge	else 
+			bge	else1
 			move.b	#1,d5		;error = 1
-			bra	after
+			bra	check_error
 else1: 
-				
 
+check_error:					;(error == NO_ERROR)
+			cmp.b	#NO_ERROR,d5
+			bne	while1 
+			add.b	#1,d3 
+			move.b	d6,d4
+			bra	while1
 
+error_case:					;if(error)
+			tst.b	d5 
+			beq	no_error
+			nop
 
-after:		
+no_error:					;print sum
 			nop
 
 done:
@@ -189,6 +198,18 @@ string:			ds.b	MAX_STRING+1
 intro1:			dc.b	"This program converts numbers in Improved Roman notation to Arabic notation.",CR,LF,NULL 
 intro2: 		dc.b	"Input is limited to UPPER case Roman digits only.",CR,LF,NULL 
 intro3:			dc.b	"To exit the program type only the Enter key.",CR,LF,NULL 
+
+error1:			dc.b	"is not a valid Roman digit",CR,LF,NULL
+
+error2:			dc.b	"is out of order for a Improved Roman number",CR,LF,NULL
+
+error3:			dc.b	"has been used as a modifier and can't be used unmodified",CR,LF,NULL
+
+error4:			dc.b	"combination of the modified prior digit and this digit is",CR,LF,"an invalid Roman number",CR,LF,NULL
+
+error5:			dc.b	"thas exceeded the maximum occurrences for this digit",CR,LF,NULL 
+
+else_error:		dc.b	"In error handling with an invalid error code",CR,LF,NULL
 
 newline:		dc.b	CR,LF,NULL 
 
