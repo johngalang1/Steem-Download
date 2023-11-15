@@ -3,12 +3,12 @@ LF		equ	10
 
 start:		pea	greeting
 		bsr	write_string
-		addq.l	#4,sp 
+		addq.l	#4,sp 		;1 longword
 exercise2:	
 		pea	s1
 		pea	s2
 		bsr	strcat 
-		addq.l	#8,sp
+		addq.l	#8,sp		;2 longwords
 	
 		bsr	exit
 
