@@ -376,7 +376,7 @@ done:
 ;Declarations
 all_roman:		ds.b	ROMAN_DIGIT*MAX_ROMANS
 
-string:			ds.b	MAX_STRING
+string:			ds.b	MAX_STRING+1
 
 intro1:			dc.b	"This program converts numbers in Improved Roman notation to Arabic notation.",CR,LF,NULL 
 intro2: 		dc.b	"Input is limited to UPPER case Roman digits only.",CR,LF,NULL 
