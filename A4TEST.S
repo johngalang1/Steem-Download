@@ -1,6 +1,7 @@
 ;Constants 
 CR			equ	13 
-LF			equ	10 
+LF			equ	10  
+TAB			equ	9
 
 TRUE			equ	1
 FALSE			equ	0 
@@ -379,24 +380,24 @@ all_roman:		ds.b	ROMAN_DIGIT*MAX_ROMANS
 string:			ds.b	MAX_STRING+1
 
 intro1:			dc.b	"This program converts numbers in Improved Roman notation to Arabic notation.",CR,LF,NULL 
-intro2: 		dc.b	"Input is limited to UPPER case Roman digits only.",CR,LF,NULL 
+intro2: 		dc.b	TAB,"Input is limited to UPPER case Roman digits only.",CR,LF,NULL 
 			ds.b	MAX_STRING
 
-intro3:			dc.b	"To exit the program type only the Enter key.",CR,LF,NULL 
+intro3:			dc.b	TAB,"To exit the program type only the Enter key.",CR,LF,NULL 
 
 intro_error:		dc.b	CR,LF,"Character at position ",NULL
 
-error1:			dc.b	"is not a valid Roman digit",CR,LF,NULL
+error1:			dc.b	TAB,"is not a valid Roman digit",CR,LF,NULL
 
-error2:			dc.b	"is out of order for a Improved Roman number",CR,LF,NULL
+error2:			dc.b	TAB,"is out of order for a Improved Roman number",CR,LF,NULL
 
-error3:			dc.b	"has been used as a modifier and can't be used unmodified",CR,LF,NULL
+error3:			dc.b	TAB,"has been used as a modifier and can't be used unmodified",CR,LF,NULL
 
-error4:			dc.b	"combination of the modified prior digit and this digit is",CR,LF,"an invalid Roman number",CR,LF,NULL
+error4:			dc.b	TAB,"combination of the modified prior digit and this digit is",CR,LF,"an invalid Roman number",CR,LF,NULL
 
-error5:			dc.b	"has exceeded the maximum occurrences for this digit",CR,LF,NULL 
+error5:			dc.b	TAB,"has exceeded the maximum occurrences for this digit",CR,LF,NULL 
 
-default_error:		dc.b	"In error handling with an invalid error code",CR,LF,NULL
+default_error:		dc.b	TAB,"In error handling with an invalid error code",CR,LF,NULL
 
 newline:		dc.b	CR,LF,NULL 
 
