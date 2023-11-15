@@ -330,7 +330,23 @@ default_print:
 			jsr	write_char 
 			bra	default_print
 no_error:					;print sum
-			nop
+			divu	#10,d2
+			swap	d2 
+			add.b	#'0',d2 
+			move.b	d2,(a2)+ 
+			clr.w	d2 
+			swap	d2
+			bne	no_error
+			move.b	#CR,d0 
+			jsr	write_char 
+			move.b	#LF,d0
+			jsr	write_char 
+print_sum:
+			cmpa.l	#intro2+52,a2
+			beq	reset
+			move.b	-(a2),d0 
+			jsr	write_char 
+			bra	print_sum
 
 reset: 			
 			move.l	#MAX_ROMANS-1,d6
@@ -364,6 +380,8 @@ string:			ds.b	MAX_STRING+1
 
 intro1:			dc.b	"This program converts numbers in Improved Roman notation to Arabic notation.",CR,LF,NULL 
 intro2: 		dc.b	"Input is limited to UPPER case Roman digits only.",CR,LF,NULL 
+			ds.b	100
+
 intro3:			dc.b	"To exit the program type only the Enter key.",CR,LF,NULL 
 
 intro_error:		dc.b	CR,LF,"Character at position ",NULL
@@ -382,7 +400,7 @@ default_error:		dc.b	"In error handling with an invalid error code",CR,LF,NULL
 
 newline:		dc.b	CR,LF,NULL 
 
-input_str:		dc.b	"Input a Roman number (Press 'Q' to exit): ",NULL
+input_str:		dc.b	"Input a Roman number (Press 'Q' to exit): ",NULL 
 
 
 ;----- SUBROUTINE: read_char -----
