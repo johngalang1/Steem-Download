@@ -51,7 +51,7 @@ ws_done:
 strcat:
 		movem.l	a0/a1,-(sp)	;push to stack 
 		move.l	12(sp),a1	;12 bytes away from s2
-		move.l	16(sp),a0 	;12 bytes away from s1 
+		move.l	16(sp),a0 	;16 bytes away from s1 
 strcat_src: 
 		move.b	(a0)+,d0 
 		beq	strcat_dst  
