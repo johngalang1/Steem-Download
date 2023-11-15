@@ -157,32 +157,32 @@ while1:						;while ((string[s_index] != C_NULL) && error == NO_ERROR)
 
 while2:			 			;while (r_index >= 0 && string[s_index] != all_roman[r_index].digit)
 			tst.b	d6 		
-			blt	r_i_less_0
+			blt	error_check1
 			mulu	#10,d6
 			move.b	DIGIT(a6,d6.w),d0
 			divu	#10,d6
 			cmp.b	d0,d1  
-			beq	r_i_less_0 
+			beq	error_check1 
 			sub.b	#1,d6
 			bra	while2
-r_i_less_0: 					;(r_index < 0)
+error_check1: 					;(r_index < 0)
 			tst.b	d6 
-			bge	r_i_greater_r_l
-			move.b	#1,d5		;error = 1
+			bge	error_check2
+			move.b	#1,d5		
 			bra	check_error
 
-r_i_greater_r_l: 				;(r_index > r_last)
+error_check2: 					;(r_index > r_last)
 			cmp.b	d4,d6
-			ble	else2 
+			ble	error_check3 
 
 			mulu	#10,d6
 			move.w	SUBTRACTOR_INDEX(a6,d6.w),d0  
 			divu	#10,d6
 			cmp.b	d4,d0 
-			beq	else3 
+			beq	calc_sum_1 
 			move.b	#2,d5 
 			bra	check_error
-else3:			
+calc_sum_1:			
 			mulu	#10,d6
 			move.w	ARAB_VALUE(a6,d6.w),d0 
 			add.w	d0,d2 			;sum = sum + all_roman[r_index].arab_value   
@@ -201,16 +201,16 @@ else3:
 			clr.l	d7
 			divu	#10,d6 
 			bra	check_error
-else2: 							;(all_roman[r_index].modifier)
+error_check3: 							;(all_roman[r_index].modifier)
 			mulu	#10,d6
  			move.b	MODIFIER(a6,d6.w),d0 
 			divu	#10,d6
 			tst.b	d0 
-			beq	else4 
+			beq	error_check4 
 			move.b	#3,d5
 			bra	check_error 
 
-else4:							
+error_check4:							
 			mulu	#10,d6 
 			move.w	SUBTRACTOR_INDEX(a6,d6.w),d0 
 			add.b	#10,d6 
@@ -218,30 +218,30 @@ else4:
 			sub.b	#10,d6
 			divu	#10,d6
 			cmp.b	d7,d0  
-			bne	else5 
+			bne	calc_sum2 
  
 			muls	#10,d7
 			move.b	MODIFIER(a6,d7.w),d0 
 			tst.b	d0 
-			beq	else5 
+			beq	calc_sum2 
 
 			move.b	#4,d5 
 			bra	check_error
 
-else5: 			
+calc_sum2: 			
 			mulu	#10,d6
 			add.b	#1,COUNT(a6,d6.w) 
 			move.b	COUNT(a6,d6.w),d0 
 			move.b	MAX_TIMES(a6,d6.w),d7 
 			cmp.b	d7,d0
-			bgt	else6
+			bgt	error_check5
 
 			add.w	ARAB_VALUE(a6,d6.w),d2 
 			divu	#10,d6 
 			move.b	d6,d4
 			bra	check_error
 			
-else6:
+error_check5:
 			move.b	#5,d5 
 			bra	check_error
 
