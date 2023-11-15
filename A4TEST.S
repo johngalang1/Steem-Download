@@ -190,7 +190,7 @@ else3:
 			move.w	ARAB_VALUE(a6,d4.w),d0 
 			divu	#10,d4
 			mulu	#2,d0 
-			sub.w	d0,d3			;sum = sum - 2 * all_roman[r_last].arab_value; 
+			sub.w	d0,d2			;sum = sum - 2 * all_roman[r_last].arab_value; 
 
 			move.w	SUBTRACTOR_INDEX(a6,d6.w),d7 
 			muls	#10,d7 
@@ -247,7 +247,8 @@ else6:
 
 check_error:					;(error == NO_ERROR)
 			cmp.b	#NO_ERROR,d5
-			bne	while1 
+			suba.l	d3,a0
+			bne	while1
 			add.b	#1,d3 
 			move.b	d6,d4
 			bra	while1
