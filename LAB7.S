@@ -1,23 +1,21 @@
 CR		equ	13
 LF		equ	10
 
-
 start:		pea	greeting
 		bsr	write_string
 		addq.l	#4,sp 
 exercise2:	
-		move.l	s1,a0
-		move.l	s2,a1 
-		bsr	strcat
+		pea	s1
+		pea	s2
+		bsr	strcat 
+		addq.l	#8,sp
 	
 		bsr	exit
 
 
 greeting:	dc.b	"hi, it worked!",CR,LF,0
-		even
 s1:		dc.b	"hello",0
 		ds.b	50
-		even
 s2:		dc.b	", world!",CR,LF,0
 		even
 
@@ -49,15 +47,31 @@ ws_done:
 ;
 ; [to do for exercise 2]
 
+
 strcat:
-		movem.l	a0/a1,-(sp)
-strcat_loop: 
-		move.b	(a1)+,d0 
+		movem.l	a0/a1,-(sp)	;push to stack 
+		move.l	12(sp),a1	;12 bytes away from s2
+		move.l	16(sp),a0 	;12 bytes away from s1 
+strcat_src: 
+		move.b	(a0)+,d0 
+		beq	strcat_dst  
+		move.b	d0,-(sp)	;push value back in the stack
+		jsr	write_char			
+		addq.l	#2,sp		;super pop value(2bytes) 
+		bra	strcat_src
+
+strcat_dst:
+		move.b	(a1)+,(a0) 
+		move.b	(a0),d0 
 		beq	strcat_done 
-		move.b	d0,(a0)+ 
-		bra	strcat_loop 
+		move.b	d0,-(sp) 
+		jsr	write_char 
+		addq.l	#2,sp 
+		adda.l	#1,a0
+		bra	strcat_dst
+
 strcat_done 
-		movem.l	(sp)+,a0/a1
+		movem.l	(sp)+,a0/a1	;push off stack
 		rts
 
 
