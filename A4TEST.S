@@ -380,7 +380,7 @@ string:			ds.b	MAX_STRING+1
 
 intro1:			dc.b	"This program converts numbers in Improved Roman notation to Arabic notation.",CR,LF,NULL 
 intro2: 		dc.b	"Input is limited to UPPER case Roman digits only.",CR,LF,NULL 
-			ds.b	100
+			ds.b	MAX_STRING+1 
 
 intro3:			dc.b	"To exit the program type only the Enter key.",CR,LF,NULL 
 
