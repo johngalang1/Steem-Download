@@ -54,39 +54,39 @@
 ;	d0 - Takes in characters and prints it out 
 ;	   - Takes values from the array of structures
 ;
-;	D1 - Holds each input character  
+;	d1 - Holds each input character  
 ;
-;	D2 - Counter for the amount of input characters 
+;	d2 - Counter for the amount of input characters 
 ;	   -Sum variable 
 ;
-;	D3 - s_index variable 
+;	d3 - s_index variable 
 ;
-;	D4 - r_last variable 
+;	d4 - r_last variable 
 ;
-;	D5 - error variable
+;	d5 - error variable
 ;
-;	D6 - r_index variable 
+;	d6 - r_index variable 
 ;	   -Index Counter for i variable 
 ;	   -Used for finding fields in the structure array
 ;
-;	D7 - counter for amount of character inputs 
+;	d7 - counter for amount of character inputs 
 ;	   - Takes values from the array of structures
 ;
-;	A0 - Holds input values
+;	a0 - Holds input values
 ;
-;	A1 - Holds introduction strings 
+;	a1 - Holds introduction strings 
 ;	   - Prints out error outputs
 ;
-;	A2 - Holds introduction strings 
+;	a2 - Holds introduction strings 
 ;	   - Reserves bytes to print the output sum
 ;
-;	A3 - Holds introduction strings
+;	a3 - Holds introduction strings
 ;
-;	A4 - Print Input string 
+;	a4 - Print Input string 
 ;
-;	A5 - newline string 
+;	a5 - newline string 
 ;
-;	A6 - Array structure
+;	a6 - Array structure
 
 ;Constants 
 CR			equ	13 
