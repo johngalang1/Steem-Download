@@ -22,13 +22,15 @@
 ;
 ;User cannot input a string size that is greater than 21 characters since 21 bytes are reserved for input value 
 ;
-;The program will check the order of these characters to see if it is valid, if not, the program will print a error message as the output  
+;The program will check the order of these characters to see if it is valid, if not, 
+;the program will print a error message as the output  
 ;
 ;If it is a legal number, will print out the sum through a “repeated division by 10” algorithm. 
 ;
 ;Status:	
 ;
-;Tested with IM, and it successfully generates an error for case 2 when it checks the subtractor field, it is not equivalent to r_last  
+;Tested with IM, and it successfully generates an error for case 2 when it checks the subtractor field, 
+;it is not equivalent to r_last  
 ;
 ;Result in debugger: ( 04 != 0)
 ;
@@ -36,11 +38,13 @@
 ;
 ;Result in debugger: (01 != 0) 
 ;
-;Tested with XCL, successfully generates an error for case 4, when it compares the subratctor field of one index of an array, to the next and both are equivalent. 
+;Tested with XCL, successfully generates an error for case 4, when it compares the subratctor field of one index of an array, 
+;to the next and both are equivalent. 
 ;
 ;Result in debugger: (01 == 01)   
 ;
-;Tested with MMMM, successfully generates an error for case 5, when it checks if the count field is less or equal to the max_times field 
+;Tested with MMMM, successfully generates an error for case 5, 
+; when it checks if the count field is less or equal to the max_times field 
 ;
 ;Result in debugger: (07 > 03) - checks if false 
 ;
@@ -57,7 +61,7 @@
 ;	d1 - Holds each input character  
 ;
 ;	d2 - Counter for the amount of input characters 
-;	   -Sum variable 
+;	   -sum variable 
 ;
 ;	d3 - s_index variable 
 ;
@@ -269,10 +273,20 @@ error_check2: 					;(r_index > r_last)
 			mulu	#10,d6
 			move.w	SUBTRACTOR_INDEX(a6,d6.w),d0  
 			divu	#10,d6
-			cmp.b	d4,d0 
-			beq	calc_sum_1 
+			cmp.b	d4,d0  
+			bne	set_error2	;check if true, then branch
+			mulu	#10,d4
+			move.b	COUNT(a6,d4.w),d0  
+			divu	#10,d4
+			cmp.b	#1,d0 
+			ble	calc_sum_1 
+set_error2: 		
 			move.b	#2,d5 
 			bra	check_error
+			
+			;beq	calc_sum_1 
+			;move.b	#2,d5 
+			;bra	check_error
 calc_sum_1:			
 			mulu	#10,d6
 			move.w	ARAB_VALUE(a6,d6.w),d0 
