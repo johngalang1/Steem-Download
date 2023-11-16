@@ -1,3 +1,93 @@
+;Name:		John Galang
+;Email:		jgala861@mtroyal.ca 
+;Course:	COMP 2655 - 002 
+;		Assignment 4 
+;Due:		10-26-2023 
+;File_Name:	ASSIGN4.S 
+;Instructor:	Paul Pospisil 
+;
+;Purpose:	Convert numbers in Improved Roman notation to
+Arabic notation.
+;
+;Details:
+;
+;Program will input values from Roman notation and check if they are legal numbers to convert into Arabic notation. 
+;
+;Roman Characters to input: M,D,C,L,X,V,I  
+;
+;These numbers are represented by sequences of symbols in decreasing order of value. 
+;
+;There limitations on the maximum occurrences of certain symbols: 
+;User can input D, L, V at most once, and C, X, I at most three times 
+;
+;User cannot input a string size that is greater than 21 characters since 21 bytes are reserved for input value 
+;
+;The program will check the order of these characters to see if it is valid, if not, the program will print a error message as the output  
+;
+;If it is a legal number, will print out the sum through a “repeated division by 10” algorithm. 
+;
+;Status:	
+;
+;Tested with IM, and it successfully generates an error for case 2 when it checks the subtractor field, it is not equivalent to r_last  
+;
+;Result in debugger: ( 04 != 0)
+;
+;Tested with CMC, successfully generates an error for case 3 when it checks the modifier field, it is non-zero   
+;
+;Result in debugger: (01 != 0) 
+;
+;Tested with XCL, successfully generates an error for case 4, when it compares the subratctor field of one index of an array, to the next and both are equivalent. 
+;
+;Result in debugger: (01 == 01)   
+;
+;Tested with MMMM, successfully generates an error for case 5, when it checks if the count field is less or equal to the max_times field 
+;
+;Result in debugger: (07 > 03) - checks if false 
+;
+;Tested with various legal numbers and generates expected results: 
+;MMMCMXCIX = 3999 
+;MCCXXXIV = 1234 
+;MMXXIII = 2023
+;
+;
+;Register Table:	
+;	d0 - Takes in characters and prints it out 
+;	   - Takes values from the array of structures
+;
+;	D1 - Holds each input character  
+;
+;	D2 - Counter for the amount of input characters 
+;	   -Sum variable 
+;
+;	D3 - s_index variable 
+;
+;	D4 - r_last variable 
+;
+;	D5 - error variable
+;
+;	D6 - r_index variable 
+;	   -Index Counter for i variable 
+;	   -Used for finding fields in the structure array
+;
+;	D7 - counter for amount of character inputs 
+;	   - Takes values from the array of structures
+;
+;	A0 - Holds input values
+;
+;	A1 - Holds introduction strings 
+;	   - Prints out error outputs
+;
+;	A2 - Holds introduction strings 
+;	   - Reserves bytes to print the output sum
+;
+;	A3 - Holds introduction strings
+;
+;	A4 - Print Input string 
+;
+;	A5 - newline string 
+;
+;	A6 - Array structure
+
 ;Constants 
 CR			equ	13 
 LF			equ	10  
