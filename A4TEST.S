@@ -283,10 +283,6 @@ error_check2: 					;(r_index > r_last)
 set_error2: 		
 			move.b	#2,d5 
 			bra	check_error
-			
-			;beq	calc_sum_1 
-			;move.b	#2,d5 
-			;bra	check_error
 calc_sum_1:			
 			mulu	#10,d6
 			move.w	ARAB_VALUE(a6,d6.w),d0 
