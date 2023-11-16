@@ -3,7 +3,7 @@
 ;Course:	COMP 2655 - 002 
 ;		Assignment 4 
 ;Due:		11-16-2023 
-;File_Name:	ASSIGN4.S 
+;File_Name:	ROMANS.S 
 ;Instructor:	Paul Pospisil 
 ;
 ;Purpose:	Convert numbers in Improved Roman notation to
@@ -509,7 +509,7 @@ error2:			dc.b	TAB,"is out of order for a Improved Roman number",CR,LF,NULL
 
 error3:			dc.b	TAB,"has been used as a modifier and can't be used unmodified",CR,LF,NULL
 
-error4:			dc.b	TAB,"combination of the modified prior digit and this digit is",CR,LF,"an invalid Roman number",TAB,CR,LF,NULL
+error4:			dc.b	TAB,"combination of the modified prior digit and this digit is",CR,LF,TAB,"an invalid Roman number",CR,LF,NULL
 
 error5:			dc.b	TAB,"has exceeded the maximum occurrences for this digit",CR,LF,NULL 
 
