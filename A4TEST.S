@@ -2,12 +2,11 @@
 ;Email:		jgala861@mtroyal.ca 
 ;Course:	COMP 2655 - 002 
 ;		Assignment 4 
-;Due:		11-16-2023 
+;Due:		11-19-2023 
 ;File_Name:	ROMANS.S 
 ;Instructor:	Paul Pospisil 
 ;
-;Purpose:	Convert numbers in Improved Roman notation to
-;Arabic notation.
+;Purpose:Convert numbers in Improved Roman notation to Arabic notation.
 ;
 ;Details:
 ;
@@ -20,8 +19,6 @@
 ;There limitations on the maximum occurrences of certain symbols: 
 ;User can input D, L, V at most once, and C, X, I at most three times 
 ;
-;User cannot input a string size that is greater than 21 characters since 21 bytes are reserved for input value 
-;
 ;The program will check the order of these characters to see if it is valid, if not, 
 ;the program will print a error message as the output  
 ;
@@ -29,29 +26,38 @@
 ;
 ;Status:	
 ;
-;Tested with IM, and it successfully generates an error for case 2 when it checks the subtractor field, 
-;it is not equivalent to r_last  
+;Error 1 Testing: Invalid Roman Digit
+;Input: ABC, Xxi, 123, Johngalang
+;Output: Prints out error message for case 1 
 ;
-;Result in debugger: ( 04 != 0)
+;Error 2 Testing: Is out of order for a Improved Roman Number 
+;Input: MLML, IVC, DVD, 
+;Output: Prints out error message for case 2
 ;
-;Tested with CMC, successfully generates an error for case 3 when it checks the modifier field, it is non-zero   
+;Error 3 Testing: Has been modified and can’t be used unmodified
+;Input: IXIM, IVI, 
+;Output: Prints out error message for case 3
 ;
-;Result in debugger: (01 != 0) 
+;Error 4 Testing: Combination of the modified prior digit and this digit is an invalid Roman number
+;Input: CMMD, XCL, IXVV
+;Output: Prints out error message for case 4
 ;
-;Tested with XCL, successfully generates an error for case 4, when it compares the subratctor field of one index of an array, 
-;to the next and both are equivalent. 
+;Error 5 Testing: Has exceeded the maximum occurrences for this digit
+;Input: IIIIX, MMMML, 
+;Output: Prints out error message for case 5
 ;
-;Result in debugger: (01 == 01)   
-;
-;Tested with MMMM, successfully generates an error for case 5, 
-; when it checks if the count field is less or equal to the max_times field 
-;
-;Result in debugger: (07 > 03) - checks if false 
-;
-;Tested with various legal numbers and generates expected results: 
-;MMMCMXCIX = 3999 
-;MCCXXXIV = 1234 
-;MMXXIII = 2023
+;Valid Testing: Legal Roman digits successfully converted into Arabic Numbers
+;MMMDCCXXIV = 3724 
+;CCLV = 255 			 	- Max number for a byte 
+;CCLVI = 256  			 	- Least number for a word
+;MCD = 1400 				- Ending zeros 	
+;I = 1  				- Smallest digit output/input
+;MMMCMXCIX = 3999 			- Largest digit output 
+;MMMDCCCLXXXVIII = 3888 		-Longest digit input
+;CI = 101 				- Zero in between 
+;LXIX = 69 			 
+;CCCLX = 360 
+;CDXX = 420
 ;
 ;
 ;Register Table:	
@@ -88,10 +94,9 @@
 ;
 ;	a4 - Print Input string 
 ;
-;	a5 - newline string 
+;	a5 - Newline string 
 ;
 ;	a6 - Array structure
-
 ;Constants 
 CR			equ	13 
 LF			equ	10  
@@ -353,7 +358,7 @@ check_error:					;(error == NO_ERROR)
 			add.b	#1,d3 
 			move.b	d6,d4
 			bra	while1
-if_error					;if(error)
+if_error					
 			tst.b	d5 
 			beq	no_error
 			lea	intro_error,a1
