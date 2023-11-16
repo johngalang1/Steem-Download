@@ -462,7 +462,19 @@ reset_loop:
 			move.b	#FALSE,MODIFIER(a6,d7.w)  
 			add.b	#10,d7
 			dbra	d6,reset_loop
-
+find_0_index:						;reset the string array 
+			move.b	-(a0),d0 
+			cmp.b	#MAX_DIGIT_COUNT,d0
+ 			beq	find_last_index			
+			bra	find_0_index
+find_last_index: 
+			adda.l	#22,a0  
+			move.b	#MAX_STRING,d7
+reset_string: 
+			move.b	#0,-(a0)
+			dbra	d7,reset_string 
+clear:
+			adda.l	#1,a0
 			clr.l 	d0
 			clr.l 	d1
 			clr.l 	d2
