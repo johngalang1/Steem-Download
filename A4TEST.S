@@ -7,7 +7,7 @@
 ;Instructor:	Paul Pospisil 
 ;
 ;Purpose:	Convert numbers in Improved Roman notation to
-Arabic notation.
+;Arabic notation.
 ;
 ;Details:
 ;
