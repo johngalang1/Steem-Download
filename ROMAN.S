@@ -260,7 +260,7 @@ while1:						;while ((string[s_index] != C_NULL) && error == NO_ERROR)
 			bne	if_error
 			move.b	#MAX_ROMANS-1,d6 ;r_index
 
-while2:			 			;while (r_index >= 0 && string[s_index] != all_roman[r_index].digit)
+find_match:			 			;while (r_index >= 0 && string[s_index] != all_roman[r_index].digit)
 			tst.b	d6 		
 			blt	error_check1
 			mulu	#10,d6
@@ -269,7 +269,7 @@ while2:			 			;while (r_index >= 0 && string[s_index] != all_roman[r_index].digi
 			cmp.b	d0,d1  
 			beq	error_check1 
 			sub.b	#1,d6
-			bra	while2
+			bra	find_match
 error_check1: 					;(r_index < 0)
 			tst.b	d6 
 			bge	error_check2
