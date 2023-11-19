@@ -113,14 +113,14 @@ NULL			equ	0
 QUIT			equ	'Q'  
 
 ;link subroutines
-          xref  read_char
-          xref  write_char
-          xref  exit
+          		xref  read_char
+          		xref  write_char
+          		xref  exit
 
 ;Roman_digit structure 
-ROMAN_DIGIT	equ	10	
-DIGIT			  equ	0	
-ARAB_VALUE	equ	2	;words start even	 
+ROMAN_DIGIT		equ	10	
+DIGIT			equ	0	
+ARAB_VALUE		equ	2	;words start even	 
 SUBTRACTOR_INDEX	equ	4	
 COUNT			equ	6	
 MODIFIED		equ	7 	
