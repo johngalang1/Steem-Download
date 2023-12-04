@@ -28,6 +28,21 @@ exponent:
 		lsl.l	#1,d1 
 		rol.l	#8,d1 
 		move.b	d1,EXP(a0)
+mantissa: 
+		move.l	d0,d1 
+		lsl.l	#1,d1 
+		and.l	#$FFFFFF,d1
+		lsr.l	#1,d1
+		ror.l	#8,d1
+		ror.l	#8,d1
+		ror.l	#4,d1
+		ror.l	#3,d1
+		move.b	#$01,d1 
+		rol.l	#3,d1
+		rol.l	#4,d1 
+		rol.l	#8,d1 
+		rol.l	#8,d1
+		
 		
 
 		movem.l	(sp)+,d0-d2/a0-a2 
