@@ -72,6 +72,8 @@ float_result1:	equ		12
 unpackFloat: 
 		link		a6,#0 
 		movem.l		d0-d2/a0-a2,-(sp) 
+		move.l		12(sp),a0		;link structure to a0 
+		
 		
 
 
