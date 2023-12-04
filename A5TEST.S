@@ -10,6 +10,17 @@
 
 GEMDOS		equ		1
 
+SIGN		equ		0
+BIASED_EXPONENT	equ		1
+MANTISSA	equ		2
+FLOATRECORD	equ		6
+
+;----- SUBROUTINE: printCstring -----
+;
+; PURPOSE: Prints a string onto the screen
+;
+; CALLER INPUT: Inputs an array of characters onto the stack 
+;		and uses GEMDOS system calls to output to screen               
 
 c_string:	equ		8
 printCstring: 	
@@ -31,7 +42,12 @@ print_done:
 		unlk		a6
 		rts
 
-
+;----- SUBROUTINE: hex2string -----
+;
+; PURPOSE: Converts each bit of a 32-bit IEEE floating point number 
+;	   into its respective characters
+; CALLER INPUT: Takes
+;
 number		equ		8 
 cstring		equ		12
 hex2string:	
