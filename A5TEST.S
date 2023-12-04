@@ -66,13 +66,25 @@ hex2str_done:
 		unlk		a6
 		rts 
 
-add_FP:
-		rts 
+
+float_number:	equ		8 
+float_result1:	equ		12
 unpackFloat: 
+		link		a6,#0 
+		movem.l		d0-d2/a0-a2,-(sp) 
+		
+
+
+
+		movem.l 	(sp)+,d0-d2/a0-a2
+		unlk		a6
 		rts 
+
 packFloat:	
 		rts 
 scale: 
 		rts 
 renormalize: 
 		rts
+add_FP:
+		rts 
