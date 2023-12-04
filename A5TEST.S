@@ -39,7 +39,13 @@ hex2string:
 		movem.l		d0-d2/a0-a2,-(sp) 
 		move.b		#1,d2 			;counter
  		move.l		number(a6),d0 
-		move.l		cstring(a6),a0
+		move.l		cstring(a6),a0 
+		move.b		#8,d3			;counter 
+reset_array:
+		move.b		#0,(a0)+
+		dbra		reset_array
+		suba.b		#9,a0
+		clr.l		d3
 hex2str_loop: 
 		mulu		#4,d2
 		move.l		d0,d1  
