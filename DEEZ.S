@@ -31,8 +31,12 @@ unpack2		equ	12
 scale: 
 		link	a6,#0 
 		movem.l	d0-d2/a0-a2,-(sp)
-		move.l	8(a6),a0 
-		move.l	12(a6),a1 
+		move.l	unpack1(a6),a0 
+		move.l	unpack2(a6),a1
+		move.b	BIASED_EXPONENT(a0),d3
+		move.b	BIASED_EXPONENT(a1),d4
+		cmp.b	d4,d3		;compare pack1 to pack 2
+ 		blo	adjust_to_pack2
 
 
 		movem.l	(sp)+,d0-d2/a0-a2		
