@@ -88,18 +88,50 @@ hex2str_done:
 		unlk		a6
 		rts 
 
-
+;----- SUBROUTINE: unpackFloat -----
+;
+; PURPOSE: Converts each bit of a 32-bit IEEE floating point number 
+;	   into its respective characters
+; CALLER INPUT: Takes
+;
 float_number:	equ		8 
 float_result1:	equ		12
 unpackFloat: 
 		link		a6,#0 
 		movem.l		d0-d2/a0-a2,-(sp) 
 		move.l		12(sp),a0		;link structure to a0 
-		
-		
-
-
-
+ 		move.l		8(a6),d0 
+		move.l		d0,d1 
+		rol.l		#4,d1			
+		and.l		#$F,d1 
+		cmp.b		#8,d1 
+		blt		sign_pos 
+sign_neg:		
+		move.b		#1,SIGN(a0)
+		bra		exponent
+sign_pos:
+		move.b		#0,SIGN(a0) 
+exponent:
+		move.l		d0,d1 
+		lsl.l		#1,d1 
+		rol.l		#8,d1 
+		move.b		d1,EXP(a0)
+mantissa: 
+		move.l		d0,d1 
+		lsl.l		#1,d1 
+		and.l		#$FFFFFF,d1
+		lsr.l		#1,d1
+		ror.l		#8,d1
+		ror.l		#8,d1
+		ror.l		#4,d1
+		ror.l		#3,d1
+		move.b		#$01,d1 
+		rol.l		#3,d1
+		rol.l		#4,d1 
+		rol.l		#8,d1 
+		rol.l		#8,d1
+		rol.l		#8,d1 
+		move.l		d1,MANTISSA(a0)
 		movem.l 	(sp)+,d0-d2/a0-a2
 		unlk		a6
 		rts 
