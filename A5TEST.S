@@ -125,7 +125,7 @@ mantissa:
 		ror.l		#8,d1
 		ror.l		#4,d1
 		ror.l		#3,d1
-		move.b		#$01,d1 
+		move.b		#$01,d1 	;place hidden one
 		rol.l		#3,d1
 		rol.l		#4,d1 
 		rol.l		#8,d1 
