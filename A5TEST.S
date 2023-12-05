@@ -94,13 +94,13 @@ hex2str_done:
 ;	   into its respective characters
 ; CALLER INPUT: Takes
 ;
-float_number:	equ		8 
-float_result1:	equ		12
+float_number	equ		8 
+float_result1	equ		12
 unpackFloat: 
 		link		a6,#0 
 		movem.l		d0-d2/a0-a2,-(sp) 
-		move.l		12(sp),a0		;link structure to a0 
- 		move.l		8(a6),d0 
+		move.l		float_result1(sp),a0		;link structure to a0 
+ 		move.l		float_number(a6),d0 
 		move.l		d0,d1 
 		rol.l		#4,d1			
 		and.l		#$F,d1 
@@ -136,8 +136,32 @@ mantissa:
 		unlk		a6
 		rts 
 
-packFloat:	
-		rts 
+;----- SUBROUTINE: packFloat -----
+;
+; PURPOSE: Converts each bit of a 32-bit IEEE floating point number 
+;	   into its respective characters
+; CALLER INPUT: Takes
+;
+float_rec	equ	8
+return_float	equ	12
+packFloat:
+		link	a6,#0 
+		movem.l	d0-d2/a0-a2,-(sp)
+		move.l	float_rec(a6),a0 
+		move.b	SIGN(a0),d1
+		lsl.l	#8,d1 
+		move.b	BIASED_EXPONENT(a0),d1
+ 		lsr.l	#1,d1
+ 		move.l	MANTISSA(a0),d2
+		rol.l	#1,d2 
+		move.b	#0,d2 
+		ror.l	#1,d2
+		move.b	d1,d2 
+		ror.l	#8,d2 
+		move.l	d2,return_float(a6)
+		movem.l	(sp)+,d0-d2/a0-a2		
+		unlk	a6
+		rts
 scale: 
 		rts 
 renormalize: 
