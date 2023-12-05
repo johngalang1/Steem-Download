@@ -59,8 +59,8 @@ hex2string:
 		move.b		#8,d3			;counter 
 reset_array:
 		move.b		#0,(a0)+
-		dbra		reset_array
-		suba.b		#9,a0
+		dbra		d3,reset_array
+		suba.w		#9,a0
 		clr.l		d3
 hex2str_loop: 
 		mulu		#4,d2
