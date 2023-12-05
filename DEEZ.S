@@ -42,9 +42,8 @@ mantissa:
 		rol.l	#4,d1 
 		rol.l	#8,d1 
 		rol.l	#8,d1
-		
-		
-
+		rol.l	#4,d1 
+		move.l	d1,MANTISSA(a0)
 		movem.l	(sp)+,d0-d2/a0-a2 
 		unlk	a6		
 		rts
