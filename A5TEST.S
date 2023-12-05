@@ -172,7 +172,7 @@ mantissa:
 ; REGISTER TABLE: 
 ;		d1 - Will combine the sign and exponent component
 ;		d2 - Will combine the mantissa component with d1
-; 		a0 - Contains the structure
+; 		a0 - Contains the floatrecord structure
 
 float_rec	equ	8
 return_float	equ	12
@@ -194,8 +194,36 @@ packFloat:
 		movem.l	(sp)+,d0-d2/a0-a2		
 		unlk	a6
 		rts
+
+;----- SUBROUTINE: scale ----
+;
+; PURPOSE: 	Takes components from the floatrecord structure
+;		back into a floating point number and returns it
+;
+; DETAILS: 	Takes in an address for the strucutre.
+;		Uses a plethera of bit shifting operations in order 
+;		to combine each component.
+;
+; REGISTER TABLE: 
+;		d1 - Will combine the sign and exponent component
+;		d2 - Will combine the mantissa component with d1
+; 		a0 - Contains a floatrecord structure to compare
+;		a1 - Contains a floatrecord structure to compare
+
+unpack1		equ	8
+unpack2		equ	12
 scale: 
-		rts 
+		link	a6,#0 
+		movem.l	d0-d2/a0-a2,-(sp)
+		move.l	8(a6),a0 
+		move.l	12(a6),a1 
+;check zero
+ 		
+
+
+		movem.l	(sp)+,d0-d2/a0-a2		
+		unlk	a6
+		rts
 renormalize: 
 		rts
 add_FP:
