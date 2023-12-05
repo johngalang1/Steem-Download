@@ -25,21 +25,44 @@ start:
 	jsr	packFloat
 	addq.l	#4,sp
 	move.l	(sp)+,d2
+	
+	pea	float_record2
+	pea	float_record1
+	jsr	scale 
+	addq.l	#8,sp
 
 unpack1		equ	8
 unpack2		equ	12
 scale: 
 		link	a6,#0 
-		movem.l	d0-d2/a0-a2,-(sp)
+		movem.l	d0-d6/a0-a2,-(sp)
 		move.l	unpack1(a6),a0 
 		move.l	unpack2(a6),a1
 		move.b	BIASED_EXPONENT(a0),d3
 		move.b	BIASED_EXPONENT(a1),d4
 		cmp.b	d4,d3		;compare pack1 to pack 2
- 		blo	adjust_to_pack2
-
-
-		movem.l	(sp)+,d0-d2/a0-a2		
+		beq	scale_done
+		cmp.b	d4,d3
+ 		bhi	adjust_pack2		;if pack1 is higher
+		
+		move.b	d4,d5			;if pack1 is lower
+		sub.b	d3,d5
+		add.b	d5,d3			;exponents now equal 
+		move.b	d3,BIASED_EXPONENT(a0)		
+		move.l	MANTISSA(a0),d6		;adjust mantissa
+		lsr.l	d5,d6
+		move.l	d6,MANTISSA(a0)
+		bra	scale_done
+adjust_pack2:
+		move.b	d3,d5
+		sub.b	d4,d5
+		add.b	d5,d4
+		move.b	d4,BIASED_EXPONENT(a1)
+		move.l	MANTISSA(a1),d6
+		lsr.l	d5,d6
+		move.l	d6,MANTISSA(a1)
+scale_done:
+		movem.l	(sp)+,d0-d6/a0-a2		
 		unlk	a6
 
 float_rec	equ	8
