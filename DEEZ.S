@@ -1,12 +1,28 @@
 SIGN	equ	0
-EXP	equ	1
-MANTIS	equ	2
+BIASED_EXPONENT	equ	1
+MANTISSA	equ	2
 FLOAT	equ	6 
 
 start: 
 	pea	float_record
 	move.l	#$C138ABCD,-(sp) 
 	jsr	unpackFloat
+	addq.l	#8,sp
+	
+	subq.l	#4,sp 
+	pea	float_record 
+	jsr	packFloat
+	addq.l	#8,sp
+
+packFloat:
+		link	a6,#0 
+		movem.l	d0-d2/a0-a2,-(sp)
+		move.l	8(a6),a0
+
+		 
+		movem.l	(sp)+,d0-d2/a0-a2		
+		unlk	a6
+		rts
 
 unpackFloat: 
 		link	a6,#0 
@@ -27,7 +43,7 @@ exponent:
 		move.l	d0,d1 
 		lsl.l	#1,d1 
 		rol.l	#8,d1 
-		move.b	d1,EXP(a0)
+		move.b	d1,BIASED_EXPONENT(a0)
 mantissa: 
 		move.l	d0,d1 
 		lsl.l	#1,d1 
