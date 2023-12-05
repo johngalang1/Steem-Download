@@ -4,16 +4,39 @@ MANTISSA	equ	2
 FLOAT	equ	6 
 
 start: 
-	pea	float_record
+	pea	float_record1
+	move.l	#$C138ABCD,-(sp) 
+	jsr	unpackFloat
+	addq.l	#8,sp
+
+	pea	float_record2
 	move.l	#$44640000,-(sp) 
 	jsr	unpackFloat
 	addq.l	#8,sp
 	
 	subq.l	#4,sp 
-	pea	float_record 
+	pea	float_record1 
 	jsr	packFloat
 	addq.l	#4,sp
 	move.l	(sp)+,d1
+
+	subq.l	#4,sp 
+	pea	float_record2 
+	jsr	packFloat
+	addq.l	#4,sp
+	move.l	(sp)+,d2
+
+unpack1		equ	8
+unpack2		equ	12
+scale: 
+		link	a6,#0 
+		movem.l	d0-d2/a0-a2,-(sp)
+		move.l	8(a6),a0 
+		move.l	12(a6),a1 
+
+
+		movem.l	(sp)+,d0-d2/a0-a2		
+		unlk	a6
 
 float_rec	equ	8
 return_float	equ	12
@@ -78,5 +101,6 @@ mantissa:
 		unlk	a6		
 		rts
 
-float_record:	ds.b	FLOAT
+float_record1:	ds.b	FLOAT
+float_record2:	ds.b	FLOAT
 deez:		dc.b	"deeznuts",0
