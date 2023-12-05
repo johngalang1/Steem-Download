@@ -5,21 +5,33 @@ FLOAT	equ	6
 
 start: 
 	pea	float_record
-	move.l	#$C138ABCD,-(sp) 
+	move.l	#$44640000,-(sp) 
 	jsr	unpackFloat
 	addq.l	#8,sp
 	
 	subq.l	#4,sp 
 	pea	float_record 
 	jsr	packFloat
-	addq.l	#8,sp
+	addq.l	#4,sp
+	move.l	(sp)+,d1
 
+float_rec	equ	8
+return_float	equ	12
 packFloat:
 		link	a6,#0 
 		movem.l	d0-d2/a0-a2,-(sp)
-		move.l	8(a6),a0
-
-		 
+		move.l	float_rec(a6),a0 
+		move.b	SIGN(a0),d1
+		lsl.l	#8,d1 
+		move.b	BIASED_EXPONENT(a0),d1
+ 		lsr.l	#1,d1
+ 		move.l	MANTISSA(a0),d2
+		rol.l	#1,d2 
+		move.b	#0,d2 
+		ror.l	#1,d2
+		move.b	d1,d2 
+		ror.l	#8,d2 
+		move.l	d2,return_float(a6)
 		movem.l	(sp)+,d0-d2/a0-a2		
 		unlk	a6
 		rts
