@@ -115,7 +115,7 @@ exponent:
 		move.l		d0,d1 
 		lsl.l		#1,d1 
 		rol.l		#8,d1 
-		move.b		d1,EXP(a0)
+		move.b		d1,BIASED_EXPONENT(a0)
 mantissa: 
 		move.l		d0,d1 
 		lsl.l		#1,d1 
