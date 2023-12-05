@@ -17,10 +17,13 @@ FLOATRECORD	equ		6
 
 ;----- SUBROUTINE: printCstring -----
 ;
-; PURPOSE: Prints a string onto the screen
+; PURPOSE: 	Prints a string onto the screen
 ;
-; CALLER INPUT: Inputs an array of characters onto the stack 
-;		and uses GEMDOS system calls to output to screen               
+; DETAILS: 	Inputs an array of characters onto the stack 
+;		and uses GEMDOS system calls to output to screen     
+; REGISTER TABLE: 
+;		d1 - Will hold each character and push it onto the stack 
+; 		a1 - Contains the character array
 
 c_string:	equ		8
 printCstring: 	
@@ -44,10 +47,20 @@ print_done:
 
 ;----- SUBROUTINE: hex2string -----
 ;
-; PURPOSE: Converts each bit of a 32-bit IEEE floating point number 
-;	   into its respective characters
-; CALLER INPUT: Takes
-;
+; PURPOSE: 	Converts each bit of a 32-bit IEEE floating point number 
+;	   	into its respective characters
+; DETAILS: 	Takes in a floating point number 
+;		and an array of characters.
+; 		First resets the array of characters to NULL.
+;		Moves the number into a data register and uses bit shift
+;	   	operations to isolate each digit onto another data register. 
+; REGISTER TABLE:
+;		d0 - Contains the floating point number
+;		d1 - Will hold and convert each digit into characters
+;		d2 - Counter to traverse each digit of the longword
+;		d3 - Array reset counter
+;		a0 - Stores each character
+
 number		equ		8 
 cstring		equ		12
 hex2string:	
@@ -90,10 +103,21 @@ hex2str_done:
 
 ;----- SUBROUTINE: unpackFloat -----
 ;
-; PURPOSE: Converts each bit of a 32-bit IEEE floating point number 
-;	   into its respective characters
-; CALLER INPUT: Takes
+; PURPOSE: 	Seperates a floating point number into 
+;		its 3 components, sign, exponent, mantissa, 
+;		and stores them in the floatrecord structure.
 ;
+; DETAILS: 	Takes in a floating point number and an address 
+;		for the strucutre.
+;		Uses a plethera of bit shifting operations in order 
+;		to seperate each component.
+;
+; REGISTER TABLE: 
+;		d0 - Holds the floating point number 
+;		d1 - Holds a copy of the floating point number 
+;		     and does all the bit operations.
+; 		a0 - Contains the structure
+
 float_number	equ		8 
 float_result1	equ		12
 unpackFloat: 
@@ -138,10 +162,18 @@ mantissa:
 
 ;----- SUBROUTINE: packFloat -----
 ;
-; PURPOSE: Converts each bit of a 32-bit IEEE floating point number 
-;	   into its respective characters
-; CALLER INPUT: Takes
+; PURPOSE: 	Takes components from the floatrecord structure
+;		back into a floating point number and returns it
 ;
+; DETAILS: 	Takes in an address for the strucutre.
+;		Uses a plethera of bit shifting operations in order 
+;		to combine each component.
+;
+; REGISTER TABLE: 
+;		d1 - Will combine the sign and exponent component
+;		d2 - Will combine the mantissa component with d1
+; 		a0 - Contains the structure
+
 float_rec	equ	8
 return_float	equ	12
 packFloat:
