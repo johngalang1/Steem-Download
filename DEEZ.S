@@ -36,11 +36,13 @@ packFloat:
 		unlk	a6
 		rts
 
+float_num	equ	8
+float_res	equ	12
 unpackFloat: 
 		link	a6,#0 
 		movem.l	d0-d2/a0-a2,-(sp) 
-		move.l	12(a6),a0		;structure in a0
- 		move.l	8(a6),d0 
+		move.l	float_res(a6),a0		;structure in a0
+ 		move.l	float_num(a6),d0 
 		move.l	d0,d1 
 		rol.l	#4,d1			
 		and.l	#$F,d1 
