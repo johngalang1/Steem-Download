@@ -67,8 +67,21 @@ addition:
 		pea	float_record1
 		move.l	(sp),a0 
 		move.l	4(sp),a1
-;make if casefor sign bit 
-
+;make if case for sign bit 
+		move.b	SIGN(a0),d1 
+		move.b	SIGN(a1),d2 
+		cmp.b	d2,d1
+		bne	not_equal		;check if signs are equal
+		move.l	MANTISSA(a0),d3		;if equal, add mantissas
+		move.l	MANTISSA(a1),d4
+not_equal:					;find larger magnitude 
+		move.l	MANTISSA(a0),d3
+		move.l	MANTISSA(a1),d4 
+		cmp.l	d4,d3 
+		bhi	op1_greater
+						;op2_greater
+		
+						
 		
 		
 		
