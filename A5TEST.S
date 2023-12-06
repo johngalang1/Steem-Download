@@ -197,18 +197,20 @@ packFloat:
 
 ;----- SUBROUTINE: scale ----
 ;
-; PURPOSE: 	Takes components from the floatrecord structure
-;		back into a floating point number and returns it
+; PURPOSE: 	Adjusts the value with the smaller exponent value, and correspondingly the
+;		associated mantissa value, so that the two floatRecords have the same exponent value.
 ;
-; DETAILS: 	Takes in an address for the strucutre.
-;		Uses a plethera of bit shifting operations in order 
-;		to combine each component.
+; DETAILS: 	Takes in two floatrecord address and uses a condition
+;		to check which of the exponents of the two are smaller.
+;		Then will adjust and place it back into the structure.
 ;
 ; REGISTER TABLE: 
-;		d1 - Will combine the sign and exponent component
-;		d2 - Will combine the mantissa component with d1
-; 		a0 - Contains a floatrecord structure to compare
-;		a1 - Contains a floatrecord structure to compare
+;		d3 - Will adjust values if needed for unpack1
+;		d4 - Will adjust values if needed for unpack2
+;		d5 - Used to subtract and find the difference between the exponents 
+;		d6 - Will adjust the mantissa for the structure
+; 		a0 - Contains a floatrecord structure for unpack1
+;		a1 - Contains a floatrecord structure for unpack2
 
 unpack1		equ	8
 unpack2		equ	12
