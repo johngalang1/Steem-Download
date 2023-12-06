@@ -44,10 +44,26 @@ test:
 	
 operand1	equ	8
 operand2	equ	12
+result		equ	16
 add_FP:
 		link	a6,#0 
 		movem.l	d0-d6/a0-a2,-(sp)
-;unpackFloat
+						;check zeroes 
+		move.l	operand1(a6),d1 
+		move.l	operand2(a6),d2
+ 		tst.l	d1 
+		beq	resultisop2 
+		tst.l	d2 
+		beq	resultisop1
+		bra 	nonzeros		;both are not zeros 
+						
+resultisop2:	
+		move.l	d2,result(a6)
+		bra	add_done
+resultisop1:
+		move.l	d1,result(a6)
+		bra	add_done
+nonzeros:					;unpack the floats
 		pea	float_record1
 		move.l	operand1(a6),-(sp) 
 		jsr	unpackFloat
@@ -57,11 +73,12 @@ add_FP:
 		move.l	operand2(a6),-(sp)
 		jsr	unpackFloat
 		addq.l	#8,sp
-;scale
+						;scale the floats
 		pea	float_record2
 		pea	float_record1
 		jsr	scale
 		addq.l	#8,sp
+
 addition:
 		pea	record_result		;holds the result of addition
 		pea	float_record2
@@ -69,53 +86,46 @@ addition:
 		move.l	(sp),a0 
 		move.l	4(sp),a1
 		move.l	8(sp),a2
-;make sure to pop off 12 bytes later
-;make if case for sign bit 
+		move.b	BIASED_EXPONENT(a0),BIASED_EXPONENT(a2)	;place exponent in result
+						;check if signs are equal
 		move.b	SIGN(a0),d1 
 		move.b	SIGN(a1),d2 
-		cmp.b	d2,d1
-		bne	not_equal		;check if signs are equal
-		move.l	MANTISSA(a0),d3		;if equal, add mantissas
-		move.l	MANTISSA(a1),d4
-		add.l	d4,d3			;result is stored in d3
-		tst.l	d3 
-		beq	add_1
-		bcs	renorm_C
-renorm_C:
+		cmp.b	d2,d1 
+		bne	not_equal 
+						;if equal, add mantissas
+		move.b	d1,SIGN(a2)		;place sign in result
+		move.l	MANTISSA(a0),d1 
+		move.l	MANTISSA(a0),d2 
+		move.l	d1,d3			;d3 will contain mantissa result
+		add.l	d2,d3 
+		move.l	d3,MANTISSA(a2)		;place mantissa in result
+						;after taking result, renormalize 
+		pea	record_result 
 		jsr	renormalize
-renorm_0:			
-		jsr	renormalize
-add_1:
-		rol.l	#1,d4
-		move.b	#1,d3 
-		ror.l	#1,d3
+		addq.l	#4,sp
+						;pack the number up
+		subq.l	#4,sp 
+		pea	record_result 
+		jsr	packFloat
+		addq.l	#4,sp  
+		bra	add_done
 
-		move.b	SIGN(a0),SIGN(a2)
-		move.b	BIASED_EXPONENT(a0),BIASED_EXPONENT(a2)
-		move.l	d3,MANTISSA(a2)
 
-not_equal:					;find larger magnitude 
-		move.l	MANTISSA(a0),d3
-		move.l	MANTISSA(a1),d4 
-		cmp.l	d4,d3 
-		bhi	op1_greater
-		move.b	SIGN(a1),SIGN(a2)	;op2_greater
-		
-op1_greater:					
-		move.b	SIGN(a0),SIGN(a2)
-		
-		
+
+add_done:
+		addq.l	#8,sp 
+		addq.l	#4,sp
 		movem.l	(sp)+,d0-d6/a0-a2		
 		unlk	a6
 		rts 
 
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 renormalize:	link	a6,#0
 		movem.l	d0-d6/a0-a2,-(sp)
 		movem.l	(sp)+,d0-d6/a0-a2
 		unlk	a6
 		rts
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 unpack1		equ	8
 unpack2		equ	12
 scale: 
@@ -149,7 +159,9 @@ adjust_pack2:
 scale_done:
 		movem.l	(sp)+,d0-d6/a0-a2		
 		unlk	a6
+		rts
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 float_rec	equ	8
 return_float	equ	12
 packFloat:
@@ -170,7 +182,7 @@ packFloat:
 		movem.l	(sp)+,d0-d2/a0-a2		
 		unlk	a6
 		rts
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 float_num	equ	8
 float_res	equ	12
 unpackFloat: 
@@ -215,6 +227,4 @@ mantissa:
 
 float_record1:	ds.b	FLOAT
 float_record2:	ds.b	FLOAT
-deez:		dc.b	"deeznuts",0
-
 record_result:	ds.b	FLOAT
