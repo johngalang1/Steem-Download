@@ -30,15 +30,48 @@ start:
 	pea	float_record1
 	jsr	scale 
 	addq.l	#8,sp
-
+test:
+	clr.l	d1
+	clr.l	d2
+	clr.l	d3
+	subq.l	#4,sp
+	move.l	#$44640000,-(sp)
+	move.l	#$C138ABCD,-(sp)
+	jsr	add_FP
+	addq.l	#8,sp
+	addq.l	#4,sp
+	move.l	(sp)+,d5
+	
 operand1	equ	8
 operand2	equ	12
 add_FP:
 		link	a6,#0 
 		movem.l	d0-d6/a0-a2,-(sp)
-		move.l	
-	
+;unpackFloat
+		pea	float_record1
+		move.l	operand1(a6),-(sp) 
+		jsr	unpackFloat
+		addq.l	#8,sp
+		
+		pea	float_record2
+		move.l	operand2(a6),-(sp)
+		jsr	unpackFloat
+		addq.l	#8,sp
+;scale
+		pea	float_record2
+		pea	float_record1
+		jsr	scale
+		addq.l	#8,sp
+addition:
+		pea	float_record2
+		pea	float_record1
+		move.l	(sp),a0 
+		move.l	4(sp),a1
+;make if casefor sign bit 
 
+		
+		
+		
 		movem.l	(sp)+,d0-d6/a0-a2		
 		unlk	a6
 		rts 
@@ -143,3 +176,5 @@ mantissa:
 float_record1:	ds.b	FLOAT
 float_record2:	ds.b	FLOAT
 deez:		dc.b	"deeznuts",0
+
+record_result:	ds.l	1
