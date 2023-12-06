@@ -63,10 +63,13 @@ add_FP:
 		jsr	scale
 		addq.l	#8,sp
 addition:
+		pea	record_result		;holds the result of addition
 		pea	float_record2
 		pea	float_record1
 		move.l	(sp),a0 
 		move.l	4(sp),a1
+		move.l	8(sp),a2
+;make sure to pop off 12 bytes later
 ;make if case for sign bit 
 		move.b	SIGN(a0),d1 
 		move.b	SIGN(a1),d2 
@@ -79,10 +82,10 @@ not_equal:					;find larger magnitude
 		move.l	MANTISSA(a1),d4 
 		cmp.l	d4,d3 
 		bhi	op1_greater
-						;op2_greater
+		move.b	SIGN(a1),SIGN(a2)	;op2_greater
 		
-						
-		
+op1_greater:					
+		move.b	SIGN(a0),SIGN(a2)
 		
 		
 		movem.l	(sp)+,d0-d6/a0-a2		
@@ -190,4 +193,4 @@ float_record1:	ds.b	FLOAT
 float_record2:	ds.b	FLOAT
 deez:		dc.b	"deeznuts",0
 
-record_result:	ds.l	1
+record_result:	ds.b	FLOAT
