@@ -77,14 +77,16 @@ addition:
 		bne	not_equal		;check if signs are equal
 		move.l	MANTISSA(a0),d3		;if equal, add mantissas
 		move.l	MANTISSA(a1),d4
-		add.l	d4,d3
+		add.l	d4,d3			;result is stored in d3
 		tst.l	d3 
-		beq	renorm_0
+		beq	add_1
 		bcs	renorm_C
 renorm_C:
 		jsr	renormalize
 renorm_0:			
 		jsr	renormalize
+add_1:
+		rol.l	#1
 
 
 not_equal:					;find larger magnitude 
