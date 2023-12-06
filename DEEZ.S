@@ -86,8 +86,13 @@ renorm_C:
 renorm_0:			
 		jsr	renormalize
 add_1:
-		rol.l	#1
+		rol.l	#1,d4
+		move.b	#1,d3 
+		ror.l	#1,d3
 
+		move.b	SIGN(a0),SIGN(a2)
+		move.b	BIASED_EXPONENT(a0),BIASED_EXPONENT(a2)
+		move.l	d3,MANTISSA(a2)
 
 not_equal:					;find larger magnitude 
 		move.l	MANTISSA(a0),d3
