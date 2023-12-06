@@ -31,6 +31,18 @@ start:
 	jsr	scale 
 	addq.l	#8,sp
 
+operand1	equ	8
+operand2	equ	12
+add_FP:
+		link	a6,#0 
+		movem.l	d0-d6/a0-a2,-(sp)
+		move.l	
+	
+
+		movem.l	(sp)+,d0-d6/a0-a2		
+		unlk	a6
+		rts 
+
 unpack1		equ	8
 unpack2		equ	12
 scale: 
