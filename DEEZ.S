@@ -39,7 +39,6 @@ test:
 	move.l	#$FFFFFFFF,-(sp)
 	jsr	add_FP
 	addq.l	#8,sp
-	addq.l	#4,sp
 	move.l	(sp)+,d5
 	
 operand1	equ	8
@@ -98,6 +97,10 @@ addition:
 		move.l	MANTISSA(a0),d2 
 		move.l	d1,d3			;d3 will contain mantissa result
 		add.l	d2,d3 
+;if there is carry, normalize right away
+
+
+
 		move.l	d3,MANTISSA(a2)		;place mantissa in result
 						;after taking result, renormalize 
 		pea	record_result 
@@ -113,6 +116,7 @@ addition:
 
 
 add_done:
+		move.l	(sp)+,result(a6)
 		addq.l	#8,sp 
 		addq.l	#4,sp
 		movem.l	(sp)+,d0-d6/a0-a2		
