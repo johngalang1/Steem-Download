@@ -35,8 +35,8 @@ test:
 	clr.l	d2
 	clr.l	d3
 	subq.l	#4,sp
-	move.l	#$44640000,-(sp)
-	move.l	#$C138ABCD,-(sp)
+	move.l	#$FFFFFFFF,-(sp)
+	move.l	#$FFFFFFFF,-(sp)
 	jsr	add_FP
 	addq.l	#8,sp
 	addq.l	#4,sp
@@ -77,6 +77,16 @@ addition:
 		bne	not_equal		;check if signs are equal
 		move.l	MANTISSA(a0),d3		;if equal, add mantissas
 		move.l	MANTISSA(a1),d4
+		add.l	d4,d3
+		tst.l	d3 
+		beq	renorm_0
+		bcs	renorm_C
+renorm_C:
+		jsr	renormalize
+renorm_0:			
+		jsr	renormalize
+
+
 not_equal:					;find larger magnitude 
 		move.l	MANTISSA(a0),d3
 		move.l	MANTISSA(a1),d4 
@@ -91,6 +101,13 @@ op1_greater:
 		movem.l	(sp)+,d0-d6/a0-a2		
 		unlk	a6
 		rts 
+
+
+renormalize:	link	a6,#0
+		movem.l	d0-d6/a0-a2,-(sp)
+		movem.l	(sp)+,d0-d6/a0-a2
+		unlk	a6
+		rts
 
 unpack1		equ	8
 unpack2		equ	12
