@@ -4,39 +4,39 @@ MANTISSA	equ	2
 FLOAT	equ	6 
 
 start: 
-	pea	float_record1
-	move.l	#$C138ABCD,-(sp) 
-	jsr	unpackFloat
-	addq.l	#8,sp
+	;pea	float_record1
+	;move.l	#$C138ABCD,-(sp) 
+	;jsr	unpackFloat
+	;addq.l	#8,sp
 
-	pea	float_record2
-	move.l	#$44640000,-(sp) 
-	jsr	unpackFloat
-	addq.l	#8,sp
+	;pea	float_record2
+	;move.l	#$44640000,-(sp) 
+	;jsr	unpackFloat
+	;addq.l	#8,sp
 	
-	subq.l	#4,sp 
-	pea	float_record1 
-	jsr	packFloat
-	addq.l	#4,sp
-	move.l	(sp)+,d1
+	;subq.l	#4,sp 
+	;pea	float_record1 
+	;jsr	packFloat
+	;addq.l	#4,sp
+	;move.l	(sp)+,d1
 
-	subq.l	#4,sp 
-	pea	float_record2 
-	jsr	packFloat
-	addq.l	#4,sp
-	move.l	(sp)+,d2
+	;subq.l	#4,sp 
+	;pea	float_record2 
+	;jsr	packFloat
+	;addq.l	#4,sp
+	;move.l	(sp)+,d2
 	
-	pea	float_record2
-	pea	float_record1
-	jsr	scale 
-	addq.l	#8,sp
+	;pea	float_record2
+	;pea	float_record1
+	;jsr	scale 
+	;addq.l	#8,sp
 test:
 	clr.l	d1
 	clr.l	d2
 	clr.l	d3
 	subq.l	#4,sp
-	move.l	#$FFFFFFFF,-(sp)
-	move.l	#$FFFFFFFF,-(sp)
+	move.l	#$C35A4800,-(sp)
+	move.l	#$C138ABCD,-(sp)
 	jsr	add_FP
 	addq.l	#8,sp
 	move.l	(sp)+,d5
@@ -54,6 +54,8 @@ add_FP:
 		beq	resultisop2 
 		tst.l	d2 
 		beq	resultisop1
+		clr.l	d1
+		clr.l	d2
 		bra 	nonzeros		;both are not zeros 
 						
 resultisop2:	
@@ -94,7 +96,7 @@ addition:
 						;if equal, add mantissas
 		move.b	d1,SIGN(a2)		;place sign in result
 		move.l	MANTISSA(a0),d1 
-		move.l	MANTISSA(a0),d2 
+		move.l	MANTISSA(a1),d2 
 		move.l	d1,d3			;d3 will contain mantissa result
 		add.l	d2,d3 
 ;if there is carry, normalize right away
@@ -113,7 +115,7 @@ addition:
 		addq.l	#4,sp  
 		bra	add_done
 
-
+not_equal:
 
 add_done:
 		move.l	(sp)+,result(a6)
