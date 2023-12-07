@@ -323,6 +323,9 @@ renorm:						;after taking result, renormalize
 		pea	record_result(a6) 
 		jsr	packFloat
 		addq.l	#4,sp  
+		
+ 		addq.l	#8,sp 
+		addq.l	#4,sp
 		bra	add_done
 not_equal:					;find large value and subtract it by smaller
 		move.l	MANTISSA(a0),d1 
@@ -342,8 +345,6 @@ sub_op2_by_op1:
 		bra	renorm
 add_done:
 		move.l	(sp)+,result(a6)
-		addq.l	#8,sp 
-		addq.l	#4,sp
 		movem.l	(sp)+,d0-d6/a0-a2		
 		unlk	a6
 		rts 
