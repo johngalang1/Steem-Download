@@ -5,7 +5,6 @@
 		xdef		renormalize 
 		xdef		printCstring 
 		xdef 		hex2string
-
 		include		gemdos.i
 
 GEMDOS		equ		1
@@ -323,6 +322,7 @@ renorm:						;after taking result, renormalize
 		pea	record_result(a6) 
 		jsr	packFloat
 		addq.l	#4,sp  
+		move.l	(sp)+,result(a6)
 		
  		addq.l	#8,sp 
 		addq.l	#4,sp
@@ -344,7 +344,7 @@ sub_op2_by_op1:
 		move.l	d3,MANTISSA(a2)
 		bra	renorm
 add_done:
-		move.l	(sp)+,result(a6)
+		;move.l	(sp)+,result(a6)
 		movem.l	(sp)+,d0-d6/a0-a2		
 		unlk	a6
 		rts 
