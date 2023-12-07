@@ -100,7 +100,7 @@ addition:
 		move.l	d1,d3			;d3 will contain mantissa result
 		add.l	d2,d3 
 ;if there is carry, normalize right away
-
+		bcs	normalize;work on later
 
 
 		move.l	d3,MANTISSA(a2)		;place mantissa in result
@@ -115,7 +115,12 @@ addition:
 		addq.l	#4,sp  
 		bra	add_done
 
-not_equal:
+not_equal:					;find large value and subtract it by smaller
+		move.l	MANTISSA(a0),d1 
+		move.l	MANTISSA(a1),d2 
+		cmp.l	d2,d1			;cmp operand1 to operand 2
+		bhi	sub_op2_by_op1
+						;sub_op1_by_op2
 
 add_done:
 		move.l	(sp)+,result(a6)
