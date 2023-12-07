@@ -81,10 +81,10 @@ nonzeros:					;unpack the floats
 		addq.l	#8,sp
 
 addition:
-		pea	record_result		;holds the result of addition
-		pea	float_record2
-		pea	float_record1
-		move.l	(sp),a0 
+		;pea	record_result		;holds the result of addition
+		;pea	float_record2
+		;pea	float_record1
+		lea	float_record1(a6),a0 
 		move.l	4(sp),a1
 		move.l	8(sp),a2
 		move.b	BIASED_EXPONENT(a0),BIASED_EXPONENT(a2)	;place exponent in result
