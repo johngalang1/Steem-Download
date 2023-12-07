@@ -250,8 +250,13 @@ scale_done:
 operand1	equ	8
 operand2	equ	12
 result		equ	16
+
+float_record1	equ	-6	
+float_record2	equ	-12			
+record_result	equ	-18
+
 add_FP:
-		link	a6,#0 
+		link	a6,#-18 
 		movem.l	d0-d6/a0-a2,-(sp)
 						;check zeroes 
 		move.l	operand1(a6),d1 
@@ -271,25 +276,25 @@ resultisop1:
 		move.l	d1,result(a6)
 		bra	add_done
 nonzeros:					;unpack the floats
-		pea	float_record1
+		pea	float_record1(a6)
 		move.l	operand1(a6),-(sp) 
 		jsr	unpackFloat
 		addq.l	#8,sp
 		
-		pea	float_record2
+		pea	float_record2(a6)
 		move.l	operand2(a6),-(sp)
 		jsr	unpackFloat
 		addq.l	#8,sp
 						;scale the floats
-		pea	float_record2
-		pea	float_record1
+		pea	float_record2(a6)
+		pea	float_record1(a6)
 		jsr	scale
 		addq.l	#8,sp
 
 addition:
-		pea	record_result		;holds the result of addition
-		pea	float_record2
-		pea	float_record1
+		pea	record_result(a6)	;holds the result of addition
+		pea	float_record2(a6)
+		pea	float_record1(a6)
 		move.l	(sp),a0 
 		move.l	4(sp),a1
 		move.l	8(sp),a2
@@ -310,12 +315,12 @@ addition:
 		move.l	d3,MANTISSA(a2)		;place mantissa in result
 
 renorm:						;after taking result, renormalize 
-		pea	record_result 
+		pea	record_result(a6) 
 		jsr	renormalize
 		addq.l	#4,sp
 						;pack the number up
 		subq.l	#4,sp 
-		pea	record_result 
+		pea	record_result(a6) 
 		jsr	packFloat
 		addq.l	#4,sp  
 		bra	add_done
@@ -370,7 +375,3 @@ renorm_done:
 		movem.l	(sp)+,d0-d6/a0-a2
 		unlk	a6
 		rts
-
-float_record1:	ds.b	FLOAT
-float_record2:	ds.b	FLOAT
-record_result:	ds.b	FLOAT
