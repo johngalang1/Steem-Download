@@ -291,12 +291,9 @@ nonzeros:					;unpack the floats
 		addq.l	#8,sp
 
 addition:
-		pea	record_result(a6)	;holds the result of addition
-		pea	float_record2(a6)
-		pea	float_record1(a6)
-		move.l	(sp),a0 
-		move.l	4(sp),a1
-		move.l	8(sp),a2
+		lea	float_record1(a6),a0
+		lea	float_record2(a6),a1
+		lea	record_result(a6),a2
 		move.b	BIASED_EXPONENT(a0),BIASED_EXPONENT(a2)	;place exponent in result
 						;check if signs are equal
 		move.b	SIGN(a0),d1 
@@ -324,8 +321,6 @@ renorm:						;after taking result, renormalize
 		addq.l	#4,sp  
 		move.l	(sp)+,result(a6)
 		
- 		addq.l	#8,sp 
-		addq.l	#4,sp
 		bra	add_done
 not_equal:					;find large value and subtract it by smaller
 		move.l	MANTISSA(a0),d1 
