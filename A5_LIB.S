@@ -11,7 +11,8 @@
 ;Details: 	Details are listed for each subroutine documentation
 ;
 ;Status:	Program does not work, when running will lead to an address/bus error within 
-;		the printCstring subroutine. 
+;		the printCstring subroutine.
+;		Program only does the first test case and then bugs out.
 ;		Issue may be caused by add_FP which may have corrupted some address registers. 
 ;		This is concluded by testing without the addition of add_FP successfully prints out all the strings on the screen.
 ;		In a seperate a5_driver I created, I used the values C138ABCD and C35A4800
