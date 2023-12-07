@@ -10,15 +10,18 @@
 ;
 ;Details: 	Details are listed for each subroutine documentation
 ;
-;Status:	Program does not work, when running will lead to an address error within 
-;		the printCstring subroutine. Issue may be caused by add_FP which may have 
-;		corrupted some address registers. This is concluded by testing without the 
-;		addition of add_FP successfully prints out all the strings on the screen.
+;Status:	Program does not work, when running will lead to an address/bus error within 
+;		the printCstring subroutine. 
+;		Issue may be caused by add_FP which may have corrupted some address registers. 
+;		This is concluded by testing without the addition of add_FP successfully prints out all the strings on the screen.
 ;		In a seperate a5_driver I created, I used the values C138ABCD and C35A4800
-;		and prints out the result C365D2BC. Based on my arithmetic on a sheet of paper,
-;		the result I received was C365D2BCD0 but in order to fit the size of a longword
-;		the last 9 bits were truncated. However, I am unable to do any further testing 
-;		due to the address error I am receiving within my program.
+;		and prints out the result C365D2BC. 
+;		packFloat, unpackFloat, and the scale subroutines function properly in this 
+;		seperate file testing. 
+;		Based on my arithmetic on a sheet of paper, the result I received was C365D2BCD0 
+;		but in order to fit the size of a longword the last 9 bits were truncated. 
+;		However, I am unable to do any further testing 
+;		due to the address/bus error I am receiving within my program.
 
 		xdef		add_FP
  		xdef		unpackFloat 
