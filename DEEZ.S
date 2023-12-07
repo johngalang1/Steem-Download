@@ -96,15 +96,14 @@ addition:
 						;if equal, add mantissas
 		move.b	d1,SIGN(a2)		;place sign in result
 		move.l	MANTISSA(a0),d1 
+		lsr.l	#1,d1
 		move.l	MANTISSA(a1),d2 
+		lsr.l	#1,d2
 		move.l	d1,d3			;d3 will contain mantissa result
-		add.l	d2,d3 
-;if there is carry, normalize right away
-		bcs	normalize;work on later
-
-
+		add.l	d2,d3
 		move.l	d3,MANTISSA(a2)		;place mantissa in result
-						;after taking result, renormalize 
+
+renorm:						;after taking result, renormalize 
 		pea	record_result 
 		jsr	renormalize
 		addq.l	#4,sp
@@ -114,14 +113,22 @@ addition:
 		jsr	packFloat
 		addq.l	#4,sp  
 		bra	add_done
-
 not_equal:					;find large value and subtract it by smaller
 		move.l	MANTISSA(a0),d1 
 		move.l	MANTISSA(a1),d2 
 		cmp.l	d2,d1			;cmp operand1 to operand 2
-		bhi	sub_op2_by_op1
-						;sub_op1_by_op2
-
+		bhi	sub_op2_by_op1		
+		move.b	SIGN(a1),SIGN(a2)
+		move.l	d2,d3 			;sub_op1_by_op2
+		sub.l	d1,d3 
+		move.l	d3,MANTISSA(a2)
+		bra	renorm
+sub_op2_by_op1:
+		move.b	SIGN(a0),SIGN(a2)
+		move.l	d1,d3 
+		sub.l	d2,d3 
+		move.l	d3,MANTISSA(a2)
+		bra	renorm
 add_done:
 		move.l	(sp)+,result(a6)
 		addq.l	#8,sp 
@@ -131,8 +138,29 @@ add_done:
 		rts 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+rec_result1	equ	8
 renormalize:	link	a6,#0
 		movem.l	d0-d6/a0-a2,-(sp)
+		move.l	rec_result1(a6),a0 
+		move.l	MANTISSA(a0),d0
+		move.b	#31,d5		;counter
+		btst.l	#$31,d0
+		bne	carry		;exists a carry bit
+		lsl.l	#1,d0
+		btst	#$31,d0		;test if normal result
+		bne	renorm_done
+find_1:					;if 0, find rightest 1
+		lsl.l	#1,d0
+		sub.b	#1,BIASED_EXPONENT(a0) 
+		btst.l	#$31,d0 
+		bne	renorm_done	
+		dbra	d5,find_1
+		bra	renorm_done	;if no 1, number is 0
+carry:				
+		lsl.l	#1,d0 
+		add.b	#1,BIASED_EXPONENT(a0)
+renorm_done:
+		move.l	d0,MANTISSA(a0)
 		movem.l	(sp)+,d0-d6/a0-a2
 		unlk	a6
 		rts
