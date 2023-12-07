@@ -1,3 +1,25 @@
+;Name:		John Galang
+;Email:		jgala861@mtroyal.ca 
+;Course:	COMP 2655 - 002 
+;		Assignment 5 
+;Due:		12-07-2023 
+;File_Name:	A5_LIB.S 
+;Instructor:	Paul Pospisil 
+;
+;Purpose: 	Provides a library of subroutines to add 32-bit IEEE floating point numbers. 
+;
+;Details: 	Details are listed for each subroutine documentation
+;
+;Status:	Program does not work, when running will lead to an address error within 
+;		the printCstring subroutine. Issue may be caused by add_FP which may have 
+;		corrupted some address registers. This is concluded by testing without the 
+;		addition of add_FP successfully prints out all the strings on the screen.
+;		In a seperate a5_driver I created, I used the values C138ABCD and C35A4800
+;		and prints out the result C365D2BC. Based on my arithmetic on a sheet of paper,
+;		the result I received was C365D2BCD0 but in order to fit the size of a longword
+;		the last 9 bits were truncated. However, I am unable to do any further testing 
+;		due to the address error I am receiving within my program.
+
 		xdef		add_FP
  		xdef		unpackFloat 
 		xdef		packFloat 
@@ -245,7 +267,25 @@ scale_done:
 		movem.l	(sp)+,d0-d6/a0-a2		
 		unlk	a6
 		rts
-;;;;;;;;;
+
+;----- SUBROUTINE: add_FP ----
+;
+; PURPOSE: 	Adds two floating point numbers and returns the result
+;
+; DETAILS: 	Takes in two floating point numbers and decomposes
+;		each of them using the functions unpack and then scales
+;		to match exponents and shift mantissas. Does signed magnitude 
+;		addition, then renormalizes result and packs it back 
+;		into a 32 bit floating point number.
+;
+; REGISTER TABLE: 
+;		d1 - Holds value for operand1
+;		d2 - Holds value for operand 2
+;		d3 - Holds the added mantissa
+; 		a0 - Contains a floatrecord structure for operand1
+;		a1 - Contains a floatrecord structure for operand2
+;		a2 - Contains the result of the added floating point numbers
+
 operand1	equ	8
 operand2	equ	12
 result		equ	16
@@ -309,7 +349,6 @@ addition:
 		move.l	d1,d3			;d3 will contain mantissa result
 		add.l	d2,d3
 		move.l	d3,MANTISSA(a2)		;place mantissa in result
-
 renorm:						;after taking result, renormalize 
 		pea	record_result(a6) 
 		jsr	renormalize
@@ -344,7 +383,21 @@ add_done:
 		unlk	a6
 		rts 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;----- SUBROUTINE: renormalize ----
+;
+; PURPOSE: 	Normalize the result from the added mantissas to ensure the 
+;		MSbit is always a 1.
+;
+; DETAILS: 	Takes in a floatrecord structure and uses bit operations 
+;		to find if there exists a carry, if the result is normal, 
+;		or if the result has been subtracted that the hidden 1 of
+;		the mantissa is a 0.
+;
+; REGISTER TABLE: 
+;		d0 - Holds the mantissa 
+;		d5 - Counter that iterates through each bit of the mantissa
+;		a0 - Holds the resulting float structure from the added mantissa
+
 rec_result1	equ	8
 renormalize:	link	a6,#0
 		movem.l	d0-d6/a0-a2,-(sp)
