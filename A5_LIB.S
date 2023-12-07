@@ -89,7 +89,7 @@ number		equ		8
 cstring		equ		12
 hex2string:	
 		link		a6,#0 
-		movem.l		d0-d2/a0-a2,-(sp) 
+		movem.l		d0-d3/a0,-(sp) 
 		move.b		#1,d2 			;counter
  		move.l		number(a6),d0 
 		move.l		cstring(a6),a0 
@@ -121,7 +121,7 @@ reset_loop:
 		bra		hex2str_loop
 hex2str_done: 
 		move.b		#0,(a0)
-		movem.l 	(sp)+,d0-d2/a0-a2
+		movem.l 	(sp)+,d0-d3/a0
 		unlk		a6
 		rts 
 
@@ -146,7 +146,7 @@ float_number	equ		8
 float_result1	equ		12
 unpackFloat: 
 		link		a6,#0 
-		movem.l		d0-d2/a0-a2,-(sp) 
+		movem.l		d0-d1/a0,-(sp) 
 		move.l		float_result1(sp),a0		;link structure to a0 
  		move.l		float_number(a6),d0 
 		move.l		d0,d1 
@@ -180,7 +180,7 @@ mantissa:
 		rol.l		#8,d1
 		rol.l		#8,d1 
 		move.l		d1,MANTISSA(a0)
-		movem.l 	(sp)+,d0-d2/a0-a2
+		movem.l 	(sp)+,d0-d1/a0
 		unlk		a6
 		rts 
 
@@ -202,7 +202,7 @@ float_rec	equ	8
 return_float	equ	12
 packFloat:
 		link	a6,#0 
-		movem.l	d0-d2/a0-a2,-(sp)
+		movem.l	d0-d2/a0,-(sp)
 		move.l	float_rec(a6),a0 
 		move.b	SIGN(a0),d1
 		lsl.l	#8,d1 
@@ -215,7 +215,7 @@ packFloat:
 		move.b	d1,d2 
 		ror.l	#8,d2 
 		move.l	d2,return_float(a6)
-		movem.l	(sp)+,d0-d2/a0-a2		
+		movem.l	(sp)+,d0-d2/a0		
 		unlk	a6
 		rts
 
@@ -240,7 +240,7 @@ unpack1		equ	8
 unpack2		equ	12
 scale: 
 		link	a6,#0 
-		movem.l	d0-d6/a0-a2,-(sp)
+		movem.l	d0-d6/a0-a1,-(sp)
 		move.l	unpack1(a6),a0 
 		move.l	unpack2(a6),a1
 		move.b	BIASED_EXPONENT(a0),d3
@@ -267,7 +267,7 @@ adjust_pack2:
 		lsr.l	d5,d6
 		move.l	d6,MANTISSA(a1)
 scale_done:
-		movem.l	(sp)+,d0-d6/a0-a2		
+		movem.l	(sp)+,d0-d6/a0-a1		
 		unlk	a6
 		rts
 
